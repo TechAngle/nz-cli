@@ -23,6 +23,9 @@
 ### Збірка
 - **Клонувати репо** за допомогою `git clone https://github.com/TechAngle/nz-cli`.
 - **Перейти** в директорію `cd nz-cli`.
-- **Зібрати** за допомогою `go mod tidy && go build ./cmd/nz` 
+- **Зібрати** за допомогою (*Windows*):
+```powershell
+go build ./cmd/nz
+```
 ## LICENSE
 ***NZ.CLI використовує MIT ліцензію.***
