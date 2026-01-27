@@ -10,5 +10,5 @@ const (
 	DiaryEndpoint      = "/schedule/diary"
 	GradesEndpoint     = "/schedule/subject-grades"
 	TimetableEndpoint  = "/schedule/timetable"          // useless, but i'll leave it here
-	MarksListEndpoint  = "/personnel-journal/mark-list" // also useless
+	MarksListEndpoint  = "/personnel-journal/mark-list" // also useless, but ok
 )

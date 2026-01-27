@@ -9,11 +9,6 @@ import (
 	"os"
 )
 
-/*
-TODO: I need to add such vars as: TODAY_DATE, START_OF_SCHOOL_YEAR, END_OF_SCHOOL_YEAR (or just set it as 31st of May, because every time it is different, lol).
-TODO: Move this funcs to separated file in utils package and vars to commons one, just to keep this file clean, hehe.
-*/
-
 const (
 	/*
 		fr, idk which i should use here, but i guess it should be negative.
@@ -50,6 +45,7 @@ func main() {
 	// Initializating client
 	client, err := client.NewClient()
 	if err != nil {
+		// TODO: Replace it with something safer
 		panic(err)
 	}
 
@@ -58,7 +54,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		return // hehe, i dont wanna go further, WRITE YOUR NEXT COMMAND AFTER AUTH BRO :3
+		return // hehe, i dont wanna go further, WRITE YOUR NEXT COMMAND AFTER AUTH :3
 	}
 
 	// checking for dates one more time ;)
