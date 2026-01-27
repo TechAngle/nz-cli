@@ -36,8 +36,8 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 		return fmt.Errorf("failed to get perfomance: %v", err)
 	}
 
-	// headers: Subject Name | Marks, Average
-	headers := []string{"Subject", "Marks", "Average"}
+	// headers: Subject Name | Marks | Average
+	headers := []string{"Subject", "Marks", "Semestr"}
 	grades := [][]string{}
 	for _, subject := range perfomance.Subjects {
 		subjectRow := []string{}
@@ -167,8 +167,9 @@ func (c *Client) Diary(startDate string, endDate string) error {
 				task := strings.TrimSpace(strings.Join(subject.Hometask, ";"))
 				fmt.Fprintf(
 					&day,
-					"[%s] (): \n\t%s\n\n",
+					"[%s] (Teacher: %s): \n\t%s\n\n",
 					visuals.SecondStyleBold.Render(strings.TrimSpace(subject.SubjectName)),
+					subject.Teacher.Name,
 					visuals.MainStyle.Render(task),
 				)
 			}

@@ -1,5 +1,7 @@
 package utils
 
+// TODO: replace generics with default functions
+
 func CalculateSum[K float32, V int | float32](numbers []V) float32 {
 	// sum
 	var sum float32
