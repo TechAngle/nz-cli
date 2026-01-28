@@ -7,6 +7,7 @@ import (
 	"nz-cli/internal/commons"
 	"nz-cli/internal/visuals"
 	"os"
+	"slices"
 )
 
 const (
@@ -18,6 +19,16 @@ const (
 	*/
 	INVALID_ID = -100
 )
+
+func clientFlagsValid(flags ...bool) bool {
+	// checking how many flags are true
+	amount := slices.IndexFunc(flags, func(f bool) bool {
+		return f == true
+	})
+
+	// if more than one flags are true we failing attempt
+	return amount <= 1
+}
 
 func main() {
 	/*
@@ -42,11 +53,18 @@ func main() {
 
 	flag.Parse()
 
+	// checking for few client flags
+	// because if we try to process few ones then nz can reject our requests and fuck us with Rate Limit (at least if they have one on their mobile api)
+	if !clientFlagsValid(*diary, *grades, *perfomance) {
+		fmt.Println(visuals.ErrorStyle.Render("Invalid client flags (select only one)"))
+		os.Exit(1)
+	}
+
 	// Initializating client
 	client, err := client.NewClient()
 	if err != nil {
-		// TODO: Replace it with something safer
-		panic(err)
+		fmt.Println(visuals.ErrorStyle.Render("Failed to initialize client:"), err)
+		os.Exit(1)
 	}
 
 	if *login {
