@@ -75,6 +75,15 @@ func main() {
 		return // hehe, i dont wanna go further, WRITE YOUR NEXT COMMAND AFTER AUTH :3
 	}
 
+	// Checking if we are authorized
+	if !client.IsAuthorized() {
+		fmt.Println(
+			visuals.ErrorStyle.Render("Not authorized!"),
+			"Use `-login -username=<username> -password=<password>` parameters for login!",
+		)
+		os.Exit(1)
+	}
+
 	// checking for dates one more time ;)
 	// just to be sure if someone stupid would set empty dates
 	if *startDate == "" {

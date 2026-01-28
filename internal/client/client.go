@@ -89,6 +89,10 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 	return nil
 }
 
+func (c *Client) IsAuthorized() bool {
+	return c.IsAuthorized()
+}
+
 // Print grades
 func (c *Client) Grades(startDate string, endDate string, subjectId int) error {
 	if !c.client.Authorized() {

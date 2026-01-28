@@ -1,15 +1,12 @@
 package utils
 
 func CalculateSum[K float32, V int | float32](numbers []V) float32 {
-	// sum
 	var sum float32
 	sum = 0
 
 	for _, i := range numbers {
 		sum += float32(i)
 	}
-
-	// log.Println(sum)
 
 	return float32(sum)
 }
