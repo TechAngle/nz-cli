@@ -7,21 +7,27 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"nz-cli/internal/commons"
 	"nz-cli/internal/models"
-	"nz-cli/internal/utils"
 
 	"github.com/andybalholm/brotli"
 )
 
+type Method string
+
+// Method
+const (
+	GetMethod  = "GET"
+	PostMethod = "POST"
+)
+
 // sends request to nz api
 /* NOTE: Requires endpoint as concantenation of original API endpoint and needed */
-func (c *NZAPIClient) SendRequest(endpoint string, payload models.Payload, responsePtr models.ApiResponse) error {
+func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload models.Payload, responsePtr models.ApiResponse) error {
 	// encoding payload
 	bodyBytes, _ := json.Marshal(payload)
 	body := bytes.NewBuffer(bodyBytes)
 
-	req, err := http.NewRequest(http.MethodPost, endpoint, body)
+	req, err := http.NewRequest(string(method), endpoint, body)
 	if err != nil {
 		return fmt.Errorf("failed to create request: %v", err)
 	}
@@ -76,70 +82,4 @@ func (c *NZAPIClient) SendRequest(endpoint string, payload models.Payload, respo
 	}
 
 	return nil
-}
-
-// logins and overwrites current account settings
-func (c *NZAPIClient) Login(payload models.LoginPayload) error {
-	var response models.LoginResponse
-	err := c.SendRequest(commons.ApiEndpoint+commons.LoginEndpoint, payload, &response)
-	if err != nil {
-		return fmt.Errorf("failed to login: %v", err)
-	}
-
-	account := &AccountState{
-		FIO:          response.Fio,
-		AccessToken:  response.AccessToken,
-		RefreshToken: response.RefreshToken,
-		StudentID:    response.StudentID,
-	}
-
-	c.account = account
-
-	return nil
-}
-
-// Get perfomance stats
-func (c *NZAPIClient) Perfomance(payload models.DefaultPayload) (*models.PerfomanceResponse, error) {
-	startDate, endDate, _ := utils.ValidatePayloadDates(payload.StartDate, payload.EndDate)
-	payload.StartDate = startDate
-	payload.EndDate = endDate
-
-	var response models.PerfomanceResponse
-	err := c.SendRequest(commons.ApiEndpoint+commons.PerfomanceEndpoint, payload, &response)
-	if err != nil {
-		return nil, fmt.Errorf("failed to send perfomance request: %v", err)
-	}
-
-	return &response, nil
-}
-
-// returns diary structure
-func (c *NZAPIClient) Diary(payload models.DefaultPayload) (*models.DiaryResponse, error) {
-	startDate, endDate, _ := utils.ValidatePayloadDates(payload.StartDate, payload.EndDate)
-	payload.StartDate = startDate
-	payload.EndDate = endDate
-
-	var response models.DiaryResponse
-	err := c.SendRequest(commons.ApiEndpoint+commons.DiaryEndpoint, payload, &response)
-	if err != nil {
-		return nil, fmt.Errorf("failed to send diary request: %v", err)
-	}
-
-	return &response, nil
-}
-
-// returns grades for specific subject id
-func (c *NZAPIClient) Grades(payload models.GradesPayload) (*models.GradesResponse, error) {
-	startDate, endDate, _ := utils.ValidatePayloadDates(payload.StartDate, payload.EndDate)
-	payload.StartDate = startDate
-	payload.EndDate = endDate
-
-	// getting response for this shit
-	var response models.GradesResponse
-	err := c.SendRequest(commons.ApiEndpoint+commons.GradesEndpoint, payload, &response)
-	if err != nil {
-		return nil, fmt.Errorf("failed to send grades request: %v", err)
-	}
-
-	return &response, nil
 }
