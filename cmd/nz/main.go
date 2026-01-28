@@ -23,7 +23,7 @@ const (
 func clientFlagsValid(flags ...bool) bool {
 	// checking how many flags are true
 	amount := slices.IndexFunc(flags, func(f bool) bool {
-		return f == true
+		return f
 	})
 
 	// if more than one flags are true we failing attempt
@@ -70,7 +70,8 @@ func main() {
 	if *login {
 		err = client.Login(*username, *password)
 		if err != nil {
-			panic(err)
+			fmt.Println(visuals.ErrorStyle.Render("Login error:"), err)
+			os.Exit(1)
 		}
 		return // hehe, i dont wanna go further, WRITE YOUR NEXT COMMAND AFTER AUTH :3
 	}
@@ -87,7 +88,7 @@ func main() {
 	}
 
 	// TODO: Add other api functions and flags here
-	switch true {
+	switch {
 	// -diary flag
 	case *diary:
 		err = client.Diary(*startDate, *endDate)

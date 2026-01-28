@@ -80,17 +80,24 @@ func (c *NZAPIClient) Grades(payload models.GradesPayload) (*models.GradesRespon
 // Refresh current access token.
 // Returns new access token
 // Method: POST
-func (c *NZAPIClient) RefreshToken(payload models.RefreshTokenPayload) (string, error) {
+func (c *NZAPIClient) RefreshToken(payload models.RefreshTokenPayload) error {
 	var response models.RefreshTokenResponse
 	err := c.SendRequest(PostMethod, commons.ApiEndpoint+commons.RefreshTokenEndpoint, payload, &response)
 	if err != nil {
-		return "", fmt.Errorf("failed to refresh token request: %v", err)
+		return fmt.Errorf("failed to refresh token request: %v", err)
 	}
 
 	// if some shit occurred on their side
 	if response.ErrorMessage != "" {
-		return "", fmt.Errorf("failed to refresh token (nz side): %s", response.ErrorMessage)
+		return fmt.Errorf("failed to refresh token (nz side): %s", response.ErrorMessage)
 	}
 
-	return response.NewAccessToken, nil
+	// saving its token to client account state and saving it to current file
+	c.account.AccessToken = response.NewAccessToken
+	err = c.account.Save(AccountStateBase)
+	if err != nil {
+		return fmt.Errorf("failed to save current account state: %v", err)
+	}
+
+	return nil
 }

@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// TODO: Make funcs for them
 var (
 	TODAY_DATE           = TodayDate()
 	START_OF_SCHOOL_YEAR = StartOfSchoolYear()
