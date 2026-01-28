@@ -1,0 +1,10 @@
+steps:
+  build:
+    when:
+      event: [push, pull_request]
+    image: golang
+    commands:
+      - go mod tidy
+      - go get
+      - go build -v ./cmd/...
+      - go test -v ./...
