@@ -37,9 +37,9 @@ func main() {
 	*/
 
 	// login flags
-	login := flag.Bool("login", false, visuals.FourthStyleBold.Render("Login to the system. Should be set with --username and --password flags"))
-	username := flag.String("username", "", visuals.FourthStyleBold.Render("Username. Required if -login argument is set"))
-	password := flag.String("password", "", visuals.FourthStyleBold.Render("Password. Required if -login argument is set"))
+	login := flag.Bool("login", false, visuals.ThirdStyleBold.Render("Login to the system. Should be set with --username and --password flags"))
+	username := flag.String("username", "", visuals.ThirdStyleBold.Render("Username. Required if -login argument is set"))
+	password := flag.String("password", "", visuals.ThirdStyleBold.Render("Password. Required if -login argument is set"))
 
 	// additional flags
 	startDate := flag.String("start-date", commons.TODAY_DATE, visuals.FourthStyleBold.Render(commons.StartDateArgUsage))
