@@ -1,6 +1,6 @@
 package commons
 
-// More endpoints you could find at
+// More endpoints you could find at https://github.com/Artemka1806/api-mobile.nz.ua
 const (
 	ApiEndpoint = "https://api-mobile.nz.ua/v2"
 

@@ -21,7 +21,7 @@ const (
 )
 
 // sends request to nz api
-/* NOTE: Requires endpoint as concantenation of original API endpoint and needed */
+/* NOTE: Requires endpoint as concatenation of original API endpoint and needed */
 func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload models.Payload, responsePtr models.ApiResponse) error {
 	// encoding payload
 	bodyBytes, _ := json.Marshal(payload)
