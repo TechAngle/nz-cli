@@ -84,5 +84,3 @@ type RefreshTokenResponse struct {
 	NewAccessToken string `json:"access_token"`
 	ErrorMessage   string `json:"error_message"`
 }
-
-// TODO: add notifications responses

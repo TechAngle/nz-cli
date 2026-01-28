@@ -24,13 +24,8 @@ const (
 /* NOTE: Requires endpoint as concatenation of original API endpoint and needed */
 func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload models.Payload, responsePtr models.ApiResponse) error {
 	// encoding payload
-	var body *bytes.Buffer
-
-	// because GET requests cannot have a body
-	if method == PostMethod {
-		bodyBytes, _ := json.Marshal(payload)
-		body = bytes.NewBuffer(bodyBytes)
-	}
+	bodyBytes, _ := json.Marshal(payload)
+	body := bytes.NewBuffer(bodyBytes)
 
 	req, err := http.NewRequest(string(method), endpoint, body)
 	if err != nil {
@@ -54,7 +49,6 @@ func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload models
 	}
 	defer res.Body.Close()
 
-	// checking if status code is OK
 	if res.StatusCode != http.StatusOK {
 		return fmt.Errorf("invalid response: [%d] %s", res.StatusCode, res.Status)
 	}

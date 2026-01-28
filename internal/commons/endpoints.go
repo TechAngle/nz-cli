@@ -4,18 +4,15 @@ package commons
 const (
 	ApiEndpoint = "https://api-mobile.nz.ua/v2"
 
-	LoginEndpoint = "/user/login"
-
-	PerfomanceEndpoint = "/schedule/student-performance"
-	DiaryEndpoint      = "/schedule/diary"
-	GradesEndpoint     = "/schedule/subject-grades"
-
+	LoginEndpoint        = "/user/login"
+	TestEndpoint         = "/user/test" // Useless
+	PerfomanceEndpoint   = "/schedule/student-performance"
+	DiaryEndpoint        = "/schedule/diary"
+	GradesEndpoint       = "/schedule/subject-grades"
 	RefreshTokenEndpoint = "/user/refresh-token"
 
-	NotificationsListEndpoint   = "/notification/"
-	UnreadNotificationsEndpoint = "/notification/unread-qty"
+	// TODO: Add notifications endpoints
 
-	TestEndpoint      = "/user/test"                   // Useless
 	TimetableEndpoint = "/schedule/timetable"          // useless, but i'll leave it here
 	MarksListEndpoint = "/personnel-journal/mark-list" // also useless, but ok
 )
