@@ -4,11 +4,9 @@ type Payload any // not any, but maybe i'll change it
 
 // generic struct
 type LoginPayload struct {
-	// Username for login
-	Password string `json:"password"`
-
-	// Password for login
-	Username string `json:"username"`
+	Username          string `json:"username"`
+	Password          string `json:"password"`
+	ExponentPushToken string `json:"exponentPushToken"`
 }
 
 // Can be used for diary and student perfomance

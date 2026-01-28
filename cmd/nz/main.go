@@ -30,6 +30,12 @@ func clientFlagsValid(flags ...bool) bool {
 	return amount <= 1
 }
 
+// Print error and exit with code 1
+func fail(message string, v ...any) {
+	fmt.Println(visuals.ErrorStyle.Render(message), v)
+	os.Exit(1)
+}
+
 func main() {
 	/*
 		I tried to separate different flags (like additional and main) with different styles here.
@@ -56,15 +62,13 @@ func main() {
 	// checking for few client flags
 	// because if we try to process few ones then nz can reject our requests and fuck us with Rate Limit (at least if they have one on their mobile api)
 	if !clientFlagsValid(*diary, *grades, *perfomance) {
-		fmt.Println(visuals.ErrorStyle.Render("Invalid client flags (select only one)"))
-		os.Exit(1)
+		fail(visuals.ErrorStyle.Render("Invalid client flags (select only one)"))
 	}
 
 	// Initializating client
 	client, err := client.NewClient()
 	if err != nil {
-		fmt.Println(visuals.ErrorStyle.Render("Failed to initialize client:"), err)
-		os.Exit(1)
+		fail(visuals.ErrorStyle.Render("Failed to initialize client:"), err)
 	}
 
 	if *login {
@@ -75,24 +79,18 @@ func main() {
 		return // hehe, i dont wanna go further, WRITE YOUR NEXT COMMAND AFTER AUTH :3
 	}
 
-	// Checking if we are authorized
-	if !client.IsAuthorized() {
-		fmt.Println(
-			visuals.ErrorStyle.Render("Not authorized!"),
-			"Use `-login -username=<username> -password=<password>` parameters for login!",
-		)
-		os.Exit(1)
+	err = client.RestoreSession()
+	if err != nil {
+		fail(visuals.ErrorStyle.Render("Failed to restore session:"), err)
 	}
 
 	// checking for dates one more time ;)
 	// just to be sure if someone stupid would set empty dates
 	if *startDate == "" {
-		fmt.Println(visuals.ErrorStyle.Render("Start Date is invalid!"))
-		os.Exit(1)
+		fail(visuals.ErrorStyle.Render("Start Date is invalid!"))
 	}
 	if *endDate == "" {
-		fmt.Println(visuals.ErrorStyle.Render("End Date is invalid!"))
-		os.Exit(1)
+		fail(visuals.ErrorStyle.Render("End Date is invalid!"))
 	}
 
 	// TODO: Add other api functions and flags here

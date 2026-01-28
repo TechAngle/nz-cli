@@ -2,18 +2,17 @@ package api
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"nz-cli/internal/commons"
-	"os"
+	"path/filepath"
 
 	"github.com/enetx/surf"
 	cookiejar "github.com/juju/persistent-cookiejar"
 )
 
 var (
-	SessionCookiesBase = commons.GetConfigPath() + "cookies.json"
-	AccountStateBase   = commons.GetConfigPath() + "account.json"
+	SessionCookiesBase = filepath.Join(commons.GetConfigPath(), "nzCookies.json")
+	AccountStateBase   = filepath.Join(commons.GetConfigPath(), "nzAccountState.json")
 )
 
 // cookies jar for http.Client
@@ -44,15 +43,20 @@ func (c NZAPIClient) Account() AccountState {
 // save current session
 // returns error if something has gone wrong
 func (c NZAPIClient) SaveSession() error {
-	// NOTE: Error handling could be removed tbh, because Windows almost always sets HOME variable
-	configDir, err := os.UserConfigDir()
-	if err != nil {
-		return fmt.Errorf("failed to get config dir: %v", err)
-	}
-
-	err = cookiesJar.Save()
-	err = c.account.Save(configDir + AccountStateBase)
+	err := cookiesJar.Save()
+	err = c.account.Save(AccountStateBase)
 	return err
+}
+
+func (c *NZAPIClient) LoadAccount() error {
+	state := AccountState{}
+	err := state.Load(AccountStateBase)
+	if err != nil {
+		return fmt.Errorf("failed to load account state: %v", err)
+	}
+	c.account = &state
+
+	return nil
 }
 
 // Create new api client
@@ -81,17 +85,7 @@ func NewApiClient() (apiClient *NZAPIClient, err error) {
 	stdClient := client.Std()
 	stdClient.Jar = cookiesJar // setting 'fake' cookies jar with saving ability!
 
-	state := AccountState{}
-	err = state.Load(AccountStateBase)
-	if err != nil {
-		log.Println("failed to load account state:", err)
-	} // else {
-	// 	// log.Println(state)
-	// 	// log.Println("account state loaded, logged in as:", state.FIO, state.StudentID)
-	// }
-
 	return &NZAPIClient{
-		account: &state,
-		client:  stdClient,
+		client: stdClient,
 	}, nil
 }

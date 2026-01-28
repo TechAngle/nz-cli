@@ -44,10 +44,17 @@ func (s *AccountState) Load(filename string) error {
 	content, err := os.ReadFile(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return fmt.Errorf("file not exists '%s'", filename)
+			// creating empty one
+			_, err = os.Create(filename)
+			if err != nil {
+				return fmt.Errorf("failed to create account file: %v", err)
+			}
+			content = make([]byte, 0)
 		}
 
-		return fmt.Errorf("failed to read file")
+		if os.IsPermission(err) {
+			return fmt.Errorf("cannot read file due to permission error: %v", err)
+		}
 	}
 
 	if len(content) == 0 {

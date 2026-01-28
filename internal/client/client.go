@@ -223,6 +223,15 @@ func (c *Client) Login(username string, password string) error {
 	return nil
 }
 
+func (c *Client) RestoreSession() error {
+	err := c.client.LoadAccount()
+	if err != nil {
+		return fmt.Errorf("failed to load account: %v", err)
+	}
+
+	return nil
+}
+
 func NewClient() (*Client, error) {
 	client, err := api.NewApiClient()
 	if err != nil {
