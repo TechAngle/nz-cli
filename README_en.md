@@ -24,7 +24,7 @@ I'd like to specify that each of following parameters requires arguments `-start
 ### Prerequisites
 - Installed **Go 1.23+** (*recommended*)
 ### Build (for Windows)
-- **Clone repo** with `git clone https://github.com/TechAngle/nz-cli`.
+- **Clone repo** with `git clone https://codeberg.org/TechAngle/nz-cli.git`.
 - **Navigate** to the directory `cd nz-cli`.
 - **Build** with (*Windows*):
 ```powershell
