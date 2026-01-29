@@ -45,7 +45,7 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 		var marksRow strings.Builder
 
 		// Setting subject name
-		subjectRow = append(subjectRow, subject.SubjectName)
+		subjectRow = append(subjectRow, fmt.Sprintf("%s [ID: %s]", subject.SubjectName, subject.SubjectID))
 
 		// adding marks
 		for i, mark := range subject.Marks {
@@ -114,7 +114,7 @@ func (c *Client) Grades(startDate string, endDate string, subjectId int) error {
 	}
 
 	var s strings.Builder
-	s.WriteString("Grades [%s]:\n\t")
+	s.WriteString("Grades:\n\t")
 
 	for i, grade := range grades.Lessons {
 		separator := ","

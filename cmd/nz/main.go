@@ -7,7 +7,6 @@ import (
 	"nz-cli/internal/commons"
 	"nz-cli/internal/visuals"
 	"os"
-	"slices"
 )
 
 const (
@@ -22,12 +21,16 @@ const (
 
 func clientFlagsValid(flags ...bool) bool {
 	// checking how many flags are true
-	amount := slices.IndexFunc(flags, func(f bool) bool {
-		return f == true
-	})
+	amount := 0
 
-	// if more than one flags are true we failing attempt
-	return amount <= 1
+	for _, f := range flags {
+		if f {
+			amount++
+		}
+	}
+
+	// if more than one flag are true we failing attempt
+	return amount == 1
 }
 
 // Print error and exit with code 1
