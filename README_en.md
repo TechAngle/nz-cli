@@ -1,5 +1,5 @@
 # NZ.CLI
-<img src="./img/NZ_banner.jpg" width="800">
+<img src="./docs/img/NZ_banner.jpg" width="800">
 
 > This client mainly made for my purpose, so I don't use large part of their API (I just don't need it). I'm developing it just for checking marks and homework without exiting terminal or switching to browser.
 
