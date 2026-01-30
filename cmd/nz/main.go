@@ -51,8 +51,8 @@ func main() {
 	password := flag.String("password", "", visuals.ThirdStyleBold.Render("Password. Required if -login argument is set"))
 
 	// additional flags
-	startDate := flag.String("start-date", commons.TODAY_DATE, visuals.FourthStyleBold.Render(commons.StartDateArgUsage))
-	endDate := flag.String("end-date", commons.TODAY_DATE, visuals.FourthStyleBold.Render(commons.EndDateArgUsage))
+	startDate := flag.String("start-date", commons.TodayDate(), visuals.FourthStyleBold.Render(commons.StartDateArgUsage))
+	endDate := flag.String("end-date", commons.TodayDate(), visuals.FourthStyleBold.Render(commons.EndDateArgUsage))
 	subjectId := flag.Int("subject-id", INVALID_ID, visuals.FourthStyleBold.Render(commons.SubjectIdArgUsage))
 
 	// client flags
