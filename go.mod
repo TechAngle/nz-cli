@@ -9,6 +9,7 @@ require (
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/enetx/surf v1.0.172
 	github.com/juju/persistent-cookiejar v1.0.0
+	golang.org/x/crypto v0.47.0
 )
 
 require (
@@ -43,9 +44,9 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/wzshiming/socks5 v0.7.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/crypto v0.47.0 // indirect
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/term v0.39.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	gopkg.in/errgo.v1 v1.0.1 // indirect
 	gopkg.in/retry.v1 v1.0.3 // indirect

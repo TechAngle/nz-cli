@@ -7,11 +7,14 @@ import (
 	"nz-cli/internal/models"
 	"nz-cli/internal/utils"
 	"nz-cli/internal/visuals"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/lipgloss/list"
 	"github.com/charmbracelet/lipgloss/table"
+	"golang.org/x/term"
 )
 
 type Client struct {
@@ -64,7 +67,7 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 
 			log.Println(mark)
 
-			fmt.Fprintf(&marksRow, "%s[%s]%s ", mark.Value, mark.Type, separator)
+			fmt.Fprintf(&marksRow, "%s[%s]%s ", visuals.MarkStyle(mark.Value).Render(mark.Value), mark.Type, separator)
 		}
 
 		// adding marks row
@@ -78,11 +81,11 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 	}
 
 	table := table.New().
-		Headers(headers...).
-		Rows(grades...).
 		Wrap(true).
-		Width(150).
-		Border(lipgloss.ThickBorder()).BorderStyle(visuals.ThirdStyleBold)
+		Border(lipgloss.NormalBorder()).
+		BorderStyle(visuals.ThirdStyleBold).
+		Headers(headers...).
+		Rows(grades...)
 
 	fmt.Println(table.Render())
 
@@ -113,27 +116,27 @@ func (c *Client) Grades(startDate string, endDate string, subjectId int) error {
 		return fmt.Errorf("failed to get grades: %v", err)
 	}
 
-	var s strings.Builder
-	s.WriteString("Grades:\n\t")
+	l := list.New().ItemStyle(
+		lipgloss.NewStyle().
+			Align(lipgloss.Center).
+			Bold(true).
+			Background(visuals.MainStyle.GetBackground()),
+	)
 
-	for i, grade := range grades.Lessons {
-		separator := ","
-
-		// changing separator when we in the end
-		if i == len(grades.Lessons)-1 {
-			separator = "."
-		}
-
-		fmt.Fprintf(&s,
-			"[%s] %s (%s)%s ",
-			grade.LessonDate,
-			grade.Mark,
-			grade.LessonType,
-			separator,
+	// adding every mark with lesson date to the list
+	for _, grade := range grades.Lessons {
+		l.Item(
+			fmt.Sprintf(
+				"[%s] %s\t(%s)",
+				visuals.ThirdStyle.Render(grade.LessonDate),
+				visuals.MarkStyle(grade.Mark).Render(grade.Mark),
+				grade.LessonType,
+			),
 		)
 	}
 
-	fmt.Println(s.String())
+	fmt.Printf("\tMissed Lessons: %s\n", visuals.SecondStyleBold.Underline(true).Render(strconv.Itoa(grades.NumberMissedLessons)))
+	fmt.Println(l)
 
 	return nil
 }
@@ -182,11 +185,18 @@ func (c *Client) Diary(startDate string, endDate string) error {
 		hometasksRow[i] = day.String()
 	}
 
+	// getting current terminal size
+	fd := int(os.Stdout.Fd())
+	width, _, err := term.GetSize(fd)
+	if err != nil {
+		return fmt.Errorf("failed to get terminal size: %v", err)
+	}
+
 	table := table.New().
 		Headers(datesList...).
 		Rows(hometasksRow).
 		Wrap(true).
-		Width(100).
+		Width(width).
 		Border(lipgloss.ThickBorder()).BorderStyle(visuals.ThirdStyleBold)
 
 	fmt.Println(table)
