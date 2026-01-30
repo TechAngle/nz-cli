@@ -5,20 +5,51 @@ import (
 	"time"
 )
 
-// TODO: Make funcs for them
-var (
-	TODAY_DATE           = TodayDate()
-	START_OF_SCHOOL_YEAR = StartOfSchoolYear()
-	END_OF_SCHOOL_YEAR   = EndOfSchoolYear()
-)
-
 /*
- NOTE: I moved functions here because in utils package them cause `import cycle` error :\
+ NOTE: I moved functions here because in utils package they cause `import cycle` error :\
 */
 
 // get todays date and format it
 func TodayDate() string {
 	return time.Now().Format(DateFormat)
+}
+
+// get start of current week
+// took this part from "https://github.com/icza/gox/blob/main/timex/timex.go" but adapted it for today's date
+func WeekStart() string {
+	t := time.Now()
+
+	// It is rollback to Monday of current week
+	if wd := t.Weekday(); wd == time.Sunday {
+		t = t.AddDate(0, 0, -6)
+	} else {
+		/*
+			NOTE: How it works: if it is not Sunday (who is iota in time package, so week starts from 0)
+				then we should add its negative value, so there: Tuesday (2) = -2+1 = 1 - its Monday
+		*/
+		t = t.AddDate(0, 0, -int(wd)+1)
+	}
+
+	return t.Format(DateFormat)
+}
+
+// get end of current week
+// reversed logic from WeekStart
+func WeekEnd() string {
+	t := time.Now()
+
+	if wd := t.Weekday(); wd == time.Monday {
+		t = t.AddDate(0, 0, 6) // adding 6 more day for Sunday
+	} else {
+		/*
+			 NOTE: How it works: in Ukrainian time Monday is the first day, but in time package it is 1,
+				so that we can use simple logic like this: if today is Wednesday (3) = 7 - 3 = 4
+				=> 4 is how many days we should add.
+		*/
+		t = t.AddDate(0, 0, 7-int(wd))
+	}
+
+	return t.Format(DateFormat)
 }
 
 // get the start of school year
