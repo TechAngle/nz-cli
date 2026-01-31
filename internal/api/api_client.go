@@ -94,11 +94,6 @@ func NewApiClient() (apiClient *NZAPIClient, err error) {
 		return nil, fmt.Errorf("faield to create fhttp client: %v", err)
 	}
 
-	// log.Println("client loaded")
-
-	// uri, _ := url.Parse(commons.ApiEndpoint)
-	// client.SetCookies(uri, ) // setting 'fake' cookies jar with saving ability!
-
 	return &NZAPIClient{
 		client: client,
 	}, nil
