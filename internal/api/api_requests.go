@@ -6,8 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net/http"
 	"nz-cli/internal/models"
+
+	http "github.com/bogdanfinn/fhttp"
 
 	"github.com/andybalholm/brotli"
 )
@@ -37,6 +38,7 @@ func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload models
 	req.Header.Add("Connection", "Keep-Alive")
 	req.Header.Add("Accept-Charset", "utf-8 *;q=0.8")
 	req.Header.Add("Accept-Encoding", "application/json")
+	req.Header.Add("User-Agent", UserAgent)
 
 	// adding access token if available
 	if c.Authorized() {
