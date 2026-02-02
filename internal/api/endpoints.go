@@ -1,4 +1,4 @@
-package commons
+package api
 
 // More endpoints you could find at https://github.com/Artemka1806/api-mobile.nz.ua
 const (
@@ -11,7 +11,8 @@ const (
 	GradesEndpoint       = "/schedule/subject-grades"
 	RefreshTokenEndpoint = "/user/refresh-token"
 
-	// TODO: Add notifications endpoints
+	NotificationsEndpoint       = "/notifications"
+	UnreadNotificationsEndpoint = "/notification/unread-qty"
 
 	TimetableEndpoint = "/schedule/timetable"          // useless, but i'll leave it here
 	MarksListEndpoint = "/personnel-journal/mark-list" // also useless, but ok
