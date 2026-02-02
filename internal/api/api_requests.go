@@ -21,12 +21,19 @@ const (
 	PostMethod = "POST"
 )
 
-// sends request to nz api
-/* NOTE: Requires endpoint as concatenation of original API endpoint and needed */
+// sends request to nz api.
+/*
+NOTE: Requires endpoint as concatenation of original API endpoint and needed
+
+NOTE: if method is GET, payload can be nil, because it won't be marshaled
+*/
 func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload models.Payload, responsePtr models.ApiResponse) error {
 	// encoding payload
-	bodyBytes, _ := json.Marshal(payload)
-	body := bytes.NewBuffer(bodyBytes)
+	var body *bytes.Buffer = nil
+	if method == PostMethod {
+		bodyBytes, _ := json.Marshal(payload)
+		body = bytes.NewBuffer(bodyBytes)
+	}
 
 	req, err := http.NewRequest(string(method), endpoint, body)
 	if err != nil {

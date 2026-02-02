@@ -84,3 +84,29 @@ type RefreshTokenResponse struct {
 	NewAccessToken string `json:"access_token"`
 	ErrorMessage   string `json:"error_message"`
 }
+
+type UnreadNotificationsResponse struct {
+	Qty          string `json:"qty"`
+	ErrorMessage string `json:"error_message"`
+}
+
+type Notifications struct {
+	Data []struct {
+		Body             string `json:"body"`
+		ID               string `json:"id"`
+		NotViewedCount   string `json:"notViewedCount"`
+		SentAt           string `json:"sentAt"`
+		Status           int    `json:"status"`
+		NotificationData struct {
+			Comment            string `json:"comment,omitempty"`
+			LessonName         string `json:"lessonName"`
+			LessonType         string `json:"lessonType,omitempty"`
+			MarkValue          string `json:"markValue,omitempty"`
+			StudentName        string `json:"studentName"`
+			Type               string `json:"type"`
+			Link               string `json:"link,omitempty"`
+			DistanceHometaskID string `json:"distance_hometask_id,omitempty"`
+		} `json:"data"`
+	} `json:"data"`
+	ErrorMessage string `json:"error_message"`
+}

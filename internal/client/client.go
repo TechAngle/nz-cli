@@ -21,6 +21,10 @@ type Client struct {
 	client *api.NZAPIClient
 }
 
+func (c *Client) IsAuthorized() bool {
+	return c.IsAuthorized()
+}
+
 // Print perfomance
 func (c *Client) Perfomance(startDate string, endDate string) error {
 	if !c.client.Authorized() {
@@ -65,7 +69,7 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 				}
 			}
 
-			log.Println(mark)
+			// log.Println(mark)
 
 			fmt.Fprintf(&marksRow, "%s[%s]%s ", visuals.MarkStyle(mark.Value).Render(mark.Value), mark.Type, separator)
 		}
@@ -92,8 +96,18 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 	return nil
 }
 
-func (c *Client) IsAuthorized() bool {
-	return c.IsAuthorized()
+// Update refresh token
+func (c *Client) RefreshToken() error {
+	accessToken, err := c.client.RefreshToken(models.RefreshTokenPayload{
+		RefreshToken: c.client.Account().RefreshToken,
+	})
+	if err != nil {
+		return fmt.Errorf("failed to refresh token: %v", err)
+	}
+
+	c.client.SetNewAccessToken(accessToken)
+
+	return nil
 }
 
 // Print grades

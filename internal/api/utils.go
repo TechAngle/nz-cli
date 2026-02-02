@@ -1,4 +1,4 @@
-package utils
+package api
 
 import (
 	"fmt"
@@ -23,4 +23,9 @@ func ValidatePayloadDates(startDate string, endDate string) (start string, end s
 	}
 
 	return startDate, endDate, nil
+}
+
+// Check if their error message is not empty
+func IsNZError(errorMessage string) bool {
+	return errorMessage != ""
 }

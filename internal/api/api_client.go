@@ -41,6 +41,10 @@ func (c NZAPIClient) Authorized() bool {
 	return c.account != nil && c.account.AccessToken != ""
 }
 
+func (c *NZAPIClient) SetNewAccessToken(token string) {
+	c.account.AccessToken = token
+}
+
 // get current account state
 func (c NZAPIClient) Account() AccountState {
 	return *c.account
