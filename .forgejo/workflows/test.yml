@@ -1,7 +1,7 @@
 on: [push]
 jobs:
   test:
-    runs-on: ubuntu
+    runs-on: codeberg-small
     steps:
       - run: go fmt ./...
       - run: go test -v ./...
