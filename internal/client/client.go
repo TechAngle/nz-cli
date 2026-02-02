@@ -65,7 +65,7 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 				}
 			}
 
-			log.Println(mark)
+			// log.Println(mark)
 
 			fmt.Fprintf(&marksRow, "%s[%s]%s ", visuals.MarkStyle(mark.Value).Render(mark.Value), mark.Type, separator)
 		}
