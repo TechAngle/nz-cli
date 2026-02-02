@@ -29,7 +29,7 @@ NOTE: if method is GET, payload can be nil, because it won't be marshaled
 */
 func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload models.Payload, responsePtr models.ApiResponse) error {
 	// encoding payload
-	var body *bytes.Buffer = nil
+	var body *bytes.Buffer = &bytes.Buffer{}
 	if method == PostMethod {
 		bodyBytes, _ := json.Marshal(payload)
 		body = bytes.NewBuffer(bodyBytes)
