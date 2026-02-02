@@ -25,8 +25,6 @@ func (c *Client) IsAuthorized() bool {
 	return c.IsAuthorized()
 }
 
-
-
 // Print perfomance
 func (c *Client) Perfomance(startDate string, endDate string) error {
 	if !c.client.Authorized() {
@@ -98,14 +96,16 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 	return nil
 }
 
+// Update refresh token
 func (c *Client) RefreshToken() error {
 	accessToken, err := c.client.RefreshToken(models.RefreshTokenPayload{
-		c.client.Account().RefreshToken,
+		RefreshToken: c.client.Account().RefreshToken,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to refresh token: %v", err)
 	}
-	c.client.
+
+	c.client.SetNewAccessToken(accessToken)
 
 	return nil
 }
