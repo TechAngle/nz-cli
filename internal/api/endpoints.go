@@ -11,7 +11,7 @@ const (
 	GradesEndpoint       = "/schedule/subject-grades"
 	RefreshTokenEndpoint = "/user/refresh-token"
 
-	NotificationsEndpoint       = "/notifications"
+	NotificationsEndpoint       = "/notification/"
 	UnreadNotificationsEndpoint = "/notification/unread-qty"
 
 	TimetableEndpoint = "/schedule/timetable"          // useless, but i'll leave it here

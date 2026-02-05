@@ -83,7 +83,7 @@ func processDataFlags() {
 		err = client.Diary(*startDate, *endDate)
 
 	// -grades flag
-	case *grades: // TODO: Test it when i'll get any grades
+	case *grades:
 		if *subjectId == INVALID_ID {
 			err = fmt.Errorf("invalid subject id: %v", err)
 			break
