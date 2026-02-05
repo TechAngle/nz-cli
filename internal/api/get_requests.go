@@ -12,7 +12,7 @@ func (c *NZAPIClient) Notifications() (*models.Notifications, error) {
 	var response models.Notifications
 	err := c.SendRequest(GetMethod, ApiEndpoint+NotificationsEndpoint, nil, &response)
 	if err != nil {
-		return nil, fmt.Errorf("faield to send notifications request: %v", err)
+		return nil, fmt.Errorf("failed to send notifications request: %v", err)
 	}
 
 	// their shitty problems

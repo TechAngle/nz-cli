@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"nz-cli/internal/visuals"
 	"os"
 )
@@ -44,7 +45,12 @@ func main() {
 	case *tui:
 		// setting -data flag to false
 		*data = false
-		// TODO: Run TUI
+		cli, err := visuals.NewCLI()
+		if err != nil {
+			log.Panicln(err)
+		}
+
+		cli.Run()
 		fmt.Println("TUI feature in development at the moment")
 	case *data:
 		processDataFlags()

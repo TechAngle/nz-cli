@@ -4,23 +4,44 @@ import (
 	"fmt"
 	"log"
 	"nz-cli/internal/api"
+	"sync"
 
-	tea "github.com/charmbracelet/bubbletea"
+	"github.com/rivo/tview"
 )
 
 // TODO: Finish CLI interface
 
-var (
-	client *api.NZAPIClient
-)
-
-type CLI struct {
-	quit bool
+// data state
+type UserData struct {
+	username    string
+	password    string
+	currentPage string
 }
 
-// save client session
-func (c *CLI) saveSession() {
-	err := client.SaveSession()
+// CLI state manager structure
+type CLI struct {
+	mutex      sync.Mutex
+	app        *tview.Application
+	pages      *tview.Pages
+	userData   *UserData
+	mainState  *mainState
+	modalState *modalState
+	newsState  *newsState
+
+	client *api.NZAPIClient
+}
+
+// restore account session
+func (c *CLI) RestoreSession() {
+	err := c.client.LoadAccount()
+	if err != nil {
+		log.Println("failed to restore session:", err)
+	}
+}
+
+// save account session
+func (c *CLI) SaveSession() {
+	err := c.client.SaveSession()
 	if err != nil {
 		log.Println("Failed to save session:", err)
 	}
@@ -29,20 +50,38 @@ func (c *CLI) saveSession() {
 // Run cli ui
 func (c *CLI) Run() {
 	log.Println("Starting...")
-	p := tea.NewProgram(initialModel(), tea.WithMouseAllMotion())
-	if _, err := p.Run(); err != nil {
-		c.saveSession()
-		panic(err)
+
+	// loading account
+	// Loading it here, because in NewCLI it will cause troubles if we don't need account before running
+	c.RestoreSession()
+	c.renderPages()
+
+	// running program
+	if err := c.app.Run(); err != nil {
+		c.SaveSession()
+		log.Panicln(err)
 	}
 }
 
 func NewCLI() (cli *CLI, err error) {
-	client, err = api.NewApiClient()
+	client, err := api.NewApiClient()
 	if err != nil {
 		return nil, fmt.Errorf("failed to create api client: %v", err)
 	}
 
+	app := tview.NewApplication()
+	pages := tview.NewPages()
+
 	return &CLI{
-		quit: false,
+		// states
+		userData:   &UserData{},
+		mainState:  initMainState(),
+		modalState: initModalState(),
+		newsState:  initNewsState(),
+
+		// others
+		app:    app,
+		pages:  pages,
+		client: client,
 	}, nil
 }
