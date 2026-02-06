@@ -17,16 +17,25 @@ type mainState struct {
 
 	// Notifications list
 	// NOTE: Better to use only 5 latest news as it was planned initially in prototype
-	newsList *tview.List
+	shortNewsList *tview.List
 }
 
 // initializate main state with widgets
 func initMainState() *mainState {
 	return &mainState{
-		loggedAccountLabel: tview.NewTextView().SetTextAlign(tview.AlignRight),
-		clockLabel:         tview.NewTextView().SetTextAlign(tview.AlignCenter),
-		unreadNewsQty:      tview.NewTextView().SetTextAlign(tview.AlignLeft),
-		newsList:           tview.NewList(),
+		loggedAccountLabel: tview.NewTextView().
+			SetTextAlign(tview.AlignRight).
+			SetTextColor(fourthXTermCode),
+		clockLabel: tview.NewTextView().
+			SetTextAlign(tview.AlignCenter).
+			SetTextColor(mainXTermCode),
+		unreadNewsQty: tview.NewTextView().
+			SetTextAlign(tview.AlignLeft).
+			SetDynamicColors(true),
+		shortNewsList: tview.NewList().
+			SetMainTextColor(fourthXTermCode).
+			SetSecondaryTextColor(secondXTermCode).
+			SetHighlightFullLine(true),
 	}
 }
 
@@ -48,7 +57,7 @@ func (c *CLI) mainPage() *tview.Flex {
 		// Latest news block
 		AddItem(tview.NewTextView().SetText("Latest news:"), 1, 1, false).
 		// latest notifications
-		AddItem(c.mainState.newsList, 0, 1, true).
+		AddItem(c.mainState.shortNewsList, 0, 1, true).
 		// help message
 		AddItem(c.helpMessage(), 0, 1, false)
 

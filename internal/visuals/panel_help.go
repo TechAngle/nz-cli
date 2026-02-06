@@ -10,9 +10,9 @@ import (
 
 var (
 	keysHelpMap = map[string]string{
-		"Ctrl + L": "Login page",
-		"Ctrl + H": "Main page",
-		"Ctrl + N": "News page",
+		"L": "Login page",
+		"H": "Main page",
+		"N": "News page",
 	}
 )
 
@@ -20,13 +20,13 @@ var (
 func (c *CLI) helpMessage() *tview.TextView {
 	var helpStr strings.Builder
 
-	helpStr.WriteString("========= HELP =========\n")
+	// helpStr.WriteString("========= HELP =========\n")
 
 	// parsing keys and values
 	for key, page := range maps.All(keysHelpMap) {
 		fmt.Fprintf(
 			&helpStr,
-			"- %s - %s\n",
+			"- %s - %s",
 			fmt.Sprintf("[%s::b]%s[%s::b]", thirdCode, key, thirdCode),
 			fmt.Sprintf("[%s]%s[%s]", fourthCode, page, thirdCode),
 		)

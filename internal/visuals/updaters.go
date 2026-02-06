@@ -21,62 +21,82 @@ const (
 	RequestDelay = 5 * time.Second
 )
 
+// updates unread value
+func (c *CLI) updateUnreadQty() {
+	// updating quantity of unread news
+	q, err := c.client.UnreadNotifications()
+	if err != nil {
+		log.Println("failed to get unread news quantity:", err)
+		return
+	}
+
+	c.mainState.unreadNewsQty.SetText(fmt.Sprintf("Unread news: [%s]%d[%s]", thirdCode, q, thirdCode))
+}
+
+// update news lists on main and news pages
+func (c *CLI) updateNewsLists() {
+	// updating news list
+	news, err := c.client.Notifications()
+	if err != nil {
+		log.Println("failed to get notifications:", err)
+		c.modalState.message.SetText(fmt.Sprintf("failed to get notifications: %s", err))
+		c.pages.SwitchToPage("modal")
+		return
+	}
+
+	// clearing news list, just that news were not doubled
+	c.mainState.shortNewsList.Clear()
+	c.newsState.newsList.Clear()
+
+	// parsing first 5 news and add them to short list.
+	// then add all news to general news list
+	for i, data := range news.Data {
+		var mainText, subText strings.Builder
+
+		// formatting main text
+		fmt.Fprintf(&mainText,
+			// format: time, subject
+			"- [Time: %s] (%s)",
+			data.SentAt,
+			data.NotificationData.LessonName,
+		)
+
+		// formatting subtext
+		fmt.Fprintf(&subText,
+			"\t%s %s %s %s",
+			// body, lesson type (optional) mark (optional), comment (optional)
+			data.Body,
+			data.NotificationData.LessonType,
+			data.NotificationData.MarkValue,
+			data.NotificationData.Comment,
+		)
+
+		log.Println(mainText.String(), subText.String())
+
+		// ignoring more than 5 news for main page
+		if i < 4 {
+			c.mainState.shortNewsList.AddItem(mainText.String(), subText.String(), rune(0), func() {
+				c.pages.SwitchToPage(NewsPage)
+			})
+		}
+
+		// adding item to news list on news page
+		c.newsState.newsList.AddItem(mainText.String(), subText.String(), rune(0), nil)
+	}
+
+}
+
 // Start notifications status updating
-func (c *CLI) startNotificationsUpdater() {
+func (c *CLI) StartNotificationsUpdater() {
 	go func() {
 		for {
 			c.app.QueueUpdateDraw(func() {
-				// updating quantity of unread news
-				q, err := c.client.UnreadNotifications()
-				if err != nil {
-					log.Println("failed to get unread news quantity:", err)
-					return
-				}
-
-				c.mainState.unreadNewsQty.SetText(fmt.Sprintf("Unread news: %d", q))
+				c.updateUnreadQty()
 
 				// sleeping a bit to not trigger rate limit
 				time.Sleep(RequestDelay)
 
-				// updating news list
-				news, err := c.client.Notifications()
-				if err != nil {
-					log.Panicln("failed to get notifications:", err)
-					c.modalState.message.SetText(fmt.Sprintf("failed to get notifications: %s", err))
-					c.pages.SwitchToPage("modal")
-					return
-				}
-
-				c.mainState.newsList.Clear()
-				// parsing first 5 news
-				for i, data := range news.Data {
-					// ignoring more than 5 news
-					if i > 4 {
-						break
-					}
-
-					var mainText strings.Builder
-					var subText strings.Builder
-
-					fmt.Fprintf(&mainText,
-						// format: time, subject
-						"[Time: %s] (%s)",
-						data.SentAt,
-						data.NotificationData.LessonName,
-					)
-
-					fmt.Fprintf(&subText,
-						"%s %s %s",
-						// body, mark, comment
-						data.Body,
-						data.NotificationData.MarkValue,
-						data.NotificationData.Comment,
-					)
-
-					log.Println(mainText.String(), subText.String())
-
-					c.mainState.newsList.AddItem(mainText.String(), subText.String(), rune(i), nil)
-				}
+				c.updateNewsLists()
 			})
 
 			time.Sleep(NotificationsUpdateDelay)
@@ -87,7 +107,7 @@ func (c *CLI) startNotificationsUpdater() {
 // Despite that account lays in AppData files, state saves in client structure
 // and if user tried to update account - access token can be empty, so we i wanna check it
 // and show him that he won't be able to send requests to nz.ua.
-func (c *CLI) startAccountStateUpdater() {
+func (c *CLI) StartAccountStateUpdater() {
 	go func() {
 		// creating a cycle with 30 second delay
 		for {
@@ -108,7 +128,7 @@ func (c *CLI) startAccountStateUpdater() {
 }
 
 // start clock updater
-func (c *CLI) startClockUpdater() {
+func (c *CLI) StartClockUpdater() {
 	go func() {
 		// update clock every second because we don't need less than it
 		for {

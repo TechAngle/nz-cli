@@ -1,6 +1,11 @@
 package visuals
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"github.com/charmbracelet/lipgloss"
+	"github.com/gdamore/tcell/v2"
+)
+
+// TODO: Change vars names to its colours names if palette is not changed
 
 /*
  *     "pastel_white": "#FCF8F8",
@@ -10,14 +15,23 @@ import "github.com/charmbracelet/lipgloss"
  "error": "#e11d62",
 */
 
+// 24-bit colour codes
+var (
+	mainXTermCode   = tcell.NewRGBColor(252, 248, 248) // pastel white
+	secondXTermCode = tcell.NewRGBColor(251, 239, 239) // pastel pink
+	thirdXTermCode  = tcell.NewRGBColor(249, 223, 223) // cream pink
+	fourthXTermCode = tcell.NewRGBColor(245, 175, 175) // peach
+)
+
 // HEX colour codes
 const (
 	mainCode   string = "#FCF8F8" // pastel white
 	secondCode string = "#FBEFEF" // pastel pink
-	thirdCode  string = "#F9DFDF" // cream code
-	fourthCode string = "#F5AFAF" // peach code
+	thirdCode  string = "#F9DFDF" // cream pink
+	fourthCode string = "#F5AFAF" // peach
 )
 
+// grades HEX colour codes
 const (
 	gradeBadCode  string = "#ff6b6b" // Pastel red (1-3)
 	gradeLowCode  string = "#f9ad6a" // Dusty orange (4-6)
@@ -58,6 +72,7 @@ var (
 	ErrorStyle = lipgloss.NewStyle().Background(lipgloss.Color("#e11d62"))
 )
 
+// styles for grades
 var (
 	GradeBadStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color(gradeBadCode)).Bold(true)
 	GradeLowStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color(gradeLowCode))
