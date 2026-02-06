@@ -21,8 +21,9 @@ type Client struct {
 	client *api.NZAPIClient
 }
 
+// is client authorized
 func (c *Client) IsAuthorized() bool {
-	return c.IsAuthorized()
+	return c.client.Authorized()
 }
 
 // Print perfomance
@@ -247,6 +248,7 @@ func (c *Client) Login(username string, password string) error {
 	return nil
 }
 
+// restore session
 func (c *Client) RestoreSession() error {
 	err := c.client.LoadAccount()
 	if err != nil {
@@ -256,6 +258,7 @@ func (c *Client) RestoreSession() error {
 	return nil
 }
 
+// initializate new api client wrapper
 func NewClient() (*Client, error) {
 	client, err := api.NewApiClient()
 	if err != nil {
