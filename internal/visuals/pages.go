@@ -21,9 +21,9 @@ func (c *CLI) renderPages() {
 	}
 
 	// starting updaters
-	c.startClockUpdater()
-	c.startAccountStateUpdater()
-	c.startNotificationsUpdater()
+	c.StartClockUpdater()
+	c.StartAccountStateUpdater()
+	c.StartNotificationsUpdater()
 
 	// pages definitions
 	c.pages.
@@ -34,18 +34,37 @@ func (c *CLI) renderPages() {
 
 	// keys handler
 	c.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
+		switch event.Rune() {
 		// login page
-		case tcell.KeyCtrlL:
+		case 'l':
 			c.pages.SwitchToPage(LoginPage)
 
 		// main page
-		case tcell.KeyCtrlH:
+		case 'm':
 			c.pages.SwitchToPage(MainPage)
+
+		// news page
+		case 'n':
+			c.pages.SwitchToPage(NewsPage)
+
+		// news page update
+		case 'r':
+			visiblePages := c.pages.GetPageNames(true)
+			if len(visiblePages) != 0 {
+				if visiblePages[0] == NewsPage {
+					// TODO: Update news
+				}
+			}
+
+		// quit hotkey
+		case 'q':
+			c.SaveSession()
+			c.app.Stop()
 		}
 
 		return event
 	})
 
-	c.app.SetRoot(c.pages, true).EnableMouse(true)
+	c.app.SetRoot(c.pages, true).
+		EnableMouse(true)
 }
