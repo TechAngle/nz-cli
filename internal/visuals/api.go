@@ -6,7 +6,8 @@ import (
 	"nz-cli/internal/models"
 )
 
-func (c *CLI) Login() error {
+// Login to system
+func (c *TUI) Login() error {
 	// checking user data
 	if c.userData.username == "" || c.userData.password == "" {
 		return fmt.Errorf("invalid username(%s) or password(%s)", c.userData.username, c.userData.password)

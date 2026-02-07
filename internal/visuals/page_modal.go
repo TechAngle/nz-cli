@@ -14,7 +14,7 @@ func initModalState() *modalState {
 }
 
 // get modal with message
-func (c *CLI) modalPage() *tview.Modal {
+func (c *TUI) modalPage() *tview.Modal {
 	modal := tview.NewModal()
 	modal.
 		SetText(c.modalState.message.GetText(true)).
