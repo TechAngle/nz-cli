@@ -19,7 +19,7 @@ type UserData struct {
 }
 
 // CLI state manager structure
-type CLI struct {
+type TUI struct {
 	mutex      sync.Mutex
 	app        *tview.Application
 	pages      *tview.Pages
@@ -32,7 +32,7 @@ type CLI struct {
 }
 
 // restore account session
-func (c *CLI) RestoreSession() {
+func (c *TUI) RestoreSession() {
 	err := c.client.LoadAccount()
 	if err != nil {
 		log.Println("failed to restore session:", err)
@@ -40,7 +40,7 @@ func (c *CLI) RestoreSession() {
 }
 
 // save account session
-func (c *CLI) SaveSession() {
+func (c *TUI) SaveSession() {
 	err := c.client.SaveSession()
 	if err != nil {
 		log.Println("Failed to save session:", err)
@@ -48,7 +48,7 @@ func (c *CLI) SaveSession() {
 }
 
 // Run cli ui
-func (c *CLI) Run() {
+func (c *TUI) Run() {
 	log.Println("Starting...")
 
 	// loading account
@@ -63,7 +63,7 @@ func (c *CLI) Run() {
 	}
 }
 
-func NewCLI() (cli *CLI, err error) {
+func NewCLI() (cli *TUI, err error) {
 	client, err := api.NewApiClient()
 	if err != nil {
 		return nil, fmt.Errorf("failed to create api client: %v", err)
@@ -72,7 +72,7 @@ func NewCLI() (cli *CLI, err error) {
 	app := tview.NewApplication()
 	pages := tview.NewPages()
 
-	return &CLI{
+	return &TUI{
 		// states
 		userData:   &UserData{},
 		mainState:  initMainState(),

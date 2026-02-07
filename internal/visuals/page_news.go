@@ -15,7 +15,7 @@ func initNewsState() *newsState {
 }
 
 // get news page
-func (c *CLI) newsPage() *tview.Flex {
+func (c *TUI) newsPage() *tview.Flex {
 	flex := tview.NewFlex()
 
 	flex.AddItem(c.newsState.newsList, 0, 1, true).

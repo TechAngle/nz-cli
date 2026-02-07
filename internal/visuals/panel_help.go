@@ -17,7 +17,7 @@ var (
 )
 
 // get help message element
-func (c *CLI) helpMessage() *tview.TextView {
+func (c *TUI) helpMessage() *tview.TextView {
 	var helpStr strings.Builder
 
 	// helpStr.WriteString("========= HELP =========\n")

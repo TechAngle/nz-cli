@@ -22,7 +22,7 @@ const (
 )
 
 // updates unread value
-func (c *CLI) updateUnreadQty() {
+func (c *TUI) updateUnreadQty() {
 	// updating quantity of unread news
 	q, err := c.client.UnreadNotifications()
 	if err != nil {
@@ -34,7 +34,7 @@ func (c *CLI) updateUnreadQty() {
 }
 
 // update news lists on main and news pages
-func (c *CLI) updateNewsLists() {
+func (c *TUI) updateNewsLists() {
 	// updating news list
 	news, err := c.client.Notifications()
 	if err != nil {
@@ -87,7 +87,7 @@ func (c *CLI) updateNewsLists() {
 }
 
 // Start notifications status updating
-func (c *CLI) StartNotificationsUpdater() {
+func (c *TUI) StartNotificationsUpdater() {
 	go func() {
 		for {
 			c.app.QueueUpdateDraw(func() {
@@ -107,7 +107,7 @@ func (c *CLI) StartNotificationsUpdater() {
 // Despite that account lays in AppData files, state saves in client structure
 // and if user tried to update account - access token can be empty, so we i wanna check it
 // and show him that he won't be able to send requests to nz.ua.
-func (c *CLI) StartAccountStateUpdater() {
+func (c *TUI) StartAccountStateUpdater() {
 	go func() {
 		// creating a cycle with 30 second delay
 		for {
@@ -128,7 +128,7 @@ func (c *CLI) StartAccountStateUpdater() {
 }
 
 // start clock updater
-func (c *CLI) StartClockUpdater() {
+func (c *TUI) StartClockUpdater() {
 	go func() {
 		// update clock every second because we don't need less than it
 		for {

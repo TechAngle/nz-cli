@@ -40,7 +40,7 @@ func initMainState() *mainState {
 }
 
 // main page primitive
-func (c *CLI) mainPage() *tview.Flex {
+func (c *TUI) mainPage() *tview.Flex {
 	// grid := tview.NewGrid()
 	flex := tview.NewFlex()
 

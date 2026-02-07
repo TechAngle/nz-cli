@@ -3,7 +3,7 @@ package visuals
 import "github.com/rivo/tview"
 
 // login page primitive
-func (c *CLI) loginPage() *tview.Form {
+func (c *TUI) loginPage() *tview.Form {
 	f := tview.NewForm()
 	f.
 		AddInputField("Username", "", 16, nil, func(text string) {

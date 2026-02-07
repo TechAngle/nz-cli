@@ -15,7 +15,7 @@ const (
 )
 
 // renders pages and sets one as root
-func (c *CLI) renderPages() {
+func (c *TUI) renderPages() {
 	if c.pages == nil {
 		log.Panicln("c.pages are nil!")
 	}
