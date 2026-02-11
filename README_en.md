@@ -2,13 +2,10 @@
 <img src="./docs/img/NZ_banner.jpg" width="800">
     
 > This client mainly made for my purpose, so I don't use large part of their API (I just don't need it). I'm developing it just for checking marks and homework without exiting terminal or switching to browser.
-
-*P.S. I plan to add TUI and other **endpoints** (generally, for getting notifications)*
  
 ## What it is?
 **NZ.CLI** - Minimal Go client for **NZ.UA**. **Main goal**: fast receiving needed information in short format.
 
-*Actually, only a few arguments are supported (their number will be a bit increased in the future)*
 ## CLI Arguments
 ### Main
 I'd like to specify that each of following parameters requires arguments `-start-date` and `-end-date` (otherwise, today's date will be used).
@@ -19,6 +16,8 @@ I'd like to specify that each of following parameters requires arguments `-start
 - `-subject-id` - **ID of subject in system**. **NOTE**:I don't know if it is identical for everyone at the moment, so I can't make easier method.
 - `-start-date` - **Start date**. Format `YYYY-MM-DD`.
 - `-end-date` - **End date**. Format `YYYY-MM-DD`.
+- `-tomorrow` - **Next day**. *Ignores* `-start-date` and `-end-date`.
+- `-yesterday` - **Previous day**. *Ignores* `-start-date` and `-end-date`.
 
 ### Shortcuts for `-start-date` and `-end-date`
 - `today` - Use today's date
@@ -26,6 +25,8 @@ I'd like to specify that each of following parameters requires arguments `-start
 - `week-end` - Use end of current week
 - `start-of-year` - Use start of school year (**1st September**)
 - `end-of-year` - Use end of school year (**31st May**)
+- 
+For using **TUI** you need to set `-tui`. However, TUI client **in development** at the moment, so only main, login, and news pages are available.
 
 *You can get all possible arguments using parameter `-help` because this documentation can be updated a bit later unlike code (especially its English version).*
 ## Build
