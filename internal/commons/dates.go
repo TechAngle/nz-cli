@@ -9,12 +9,22 @@ import (
  NOTE: I moved functions here because in utils package they cause `import cycle` error :\
 */
 
-// get todays date and format it
+// Get todays date in correct format
 func TodayDate() string {
 	return time.Now().Format(DateFormat)
 }
 
-// get start of current week
+// Get tomorrow's date
+func NextDay() string {
+	return time.Now().AddDate(0, 0, 1).Format(DateFormat)
+}
+
+// Get yesterday's date
+func PreviousDay() string {
+	return time.Now().AddDate(0, 0, -1).Format(DateFormat)
+}
+
+// Get start of current week
 // took this part from "https://github.com/icza/gox/blob/main/timex/timex.go" but adapted it for today's date
 func WeekStart() string {
 	t := time.Now()
@@ -33,8 +43,8 @@ func WeekStart() string {
 	return t.Format(DateFormat)
 }
 
-// get end of current week
-// reversed logic from WeekStart
+// Get end of current week.
+// Reversed logic of WeekStart
 func WeekEnd() string {
 	t := time.Now()
 
@@ -52,7 +62,7 @@ func WeekEnd() string {
 	return t.Format(DateFormat)
 }
 
-// get the start of school year
+// Get the start of school year
 func StartOfSchoolYear() string {
 	/*
 		We need to check here those things:
@@ -76,7 +86,7 @@ func StartOfSchoolYear() string {
 	}
 }
 
-// get the start of school year
+// Get the start of school year
 func EndOfSchoolYear() string {
 	/* This thing has a bit other logic. We need to do same thing, BUT we should add to current year and reverse other things */
 	t := time.Now()
