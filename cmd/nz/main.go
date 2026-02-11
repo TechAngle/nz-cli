@@ -53,6 +53,6 @@ func main() {
 		cli.Run()
 		fmt.Println("TUI feature in development at the moment")
 	case *data:
-		processDataFlags()
+		processCliFlags()
 	}
 }
