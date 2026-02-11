@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+// Validates dates.
+// If end date was before start date - it switches them.
 func ValidatePayloadDates(startDate string, endDate string) (start string, end string, err error) {
 	// parsing periods
 	startTime, err := time.Parse(commons.DateFormat, startDate)

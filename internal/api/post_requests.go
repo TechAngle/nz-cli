@@ -5,7 +5,7 @@ import (
 	"nz-cli/internal/models"
 )
 
-// logins and overwrites current account settings
+// Logins and overwrites current account settings
 // Method: POST
 func (c *NZAPIClient) Login(payload models.LoginPayload) error {
 	var response models.LoginResponse
@@ -42,7 +42,7 @@ func (c *NZAPIClient) Perfomance(payload models.DefaultPayload) (*models.Perfoma
 	return &response, nil
 }
 
-// returns diary structure
+// Get diary structure
 // Method: POST
 func (c *NZAPIClient) Diary(payload models.DefaultPayload) (*models.DiaryResponse, error) {
 	startDate, endDate, _ := ValidatePayloadDates(payload.StartDate, payload.EndDate)
