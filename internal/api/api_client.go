@@ -41,24 +41,25 @@ func (c NZAPIClient) Authorized() bool {
 	return c.account != nil && c.account.AccessToken != ""
 }
 
+// Set new access token instead of current one
 func (c *NZAPIClient) SetNewAccessToken(token string) {
 	c.account.AccessToken = token
 }
 
-// get current account state
+// Get current account state
 func (c NZAPIClient) Account() AccountState {
 	return *c.account
 }
 
-// save current session
-// returns error if something has gone wrong
+// Save current session.
+// Returns error if something has gone wrong
 func (c NZAPIClient) SaveSession() error {
 	err := cookiesJar.Save()
 	err = c.account.Save(AccountStateBase)
 	return err
 }
 
-// load account from base
+// Load account from base
 func (c *NZAPIClient) LoadAccount() error {
 	state := AccountState{}
 	err := state.Load(AccountStateBase)

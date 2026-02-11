@@ -21,8 +21,9 @@ const (
 	PostMethod = "POST"
 )
 
-// sends request to nz api.
 /*
+Sends request to nz api.
+
 NOTE: Requires endpoint as concatenation of original API endpoint and needed
 
 NOTE: if method is GET, payload can be nil, because it won't be marshaled
