@@ -23,8 +23,8 @@ func (c *NZAPIClient) Notifications() (*models.Notifications, error) {
 	return &response, nil
 }
 
-// get unread notifications integer instead of their string.
-// if error occured - returns -1 (just because count of unread notifications cannot be negative)
+// Get unread notifications integer instead of their string.
+// If error occured - returns -1 (just because count of unread notifications cannot be negative)
 // Method: GET
 func (c *NZAPIClient) UnreadNotifications() (int, error) {
 	var response models.UnreadNotificationsResponse

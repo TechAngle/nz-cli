@@ -58,7 +58,7 @@ func (c *NZAPIClient) Diary(payload models.DefaultPayload) (*models.DiaryRespons
 	return &response, nil
 }
 
-// returns grades for specific subject id
+// Returns grades for specific subject id
 // Method: POST
 func (c *NZAPIClient) Grades(payload models.GradesPayload) (*models.GradesResponse, error) {
 	startDate, endDate, _ := ValidatePayloadDates(payload.StartDate, payload.EndDate)
