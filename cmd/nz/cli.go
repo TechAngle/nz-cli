@@ -36,7 +36,7 @@ func validateDates() {
 }
 
 // get only data from client, without TUI
-func processDataFlags() {
+func processCliFlags() {
 	/*
 		I tried to separate different flags (like additional and main) with different styles here.
 		But I'll need to create more 'distinctive' color palette (or find another one).
