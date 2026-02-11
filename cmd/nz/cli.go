@@ -73,11 +73,20 @@ func processCliFlags() {
 		fail(visuals.ErrorStyle.Render("Failed to restore session:"), err)
 	}
 
-	// parsing and changing shortcuts
-	parseDate(startDate)
-	parseDate(endDate)
+	// replacing days if one of arguments set
+	// i dont think if we put two string to stack it will eat so much memory
+	if *tomorrow {
+		*startDate, *endDate = commons.NextDay(), commons.NextDay()
+	} else if *yesterday {
+		*startDate, *endDate = commons.PreviousDay(), commons.PreviousDay()
+	} else {
+		// parsing and replacing shortcuts to their dates
+		parseDate(startDate)
+		parseDate(endDate)
+	}
 
-	switch true {
+	// REMOVED: true in switch (why the hell i put it here?)
+	switch {
 	// -diary flag
 	case *diary:
 		err = client.Diary(*startDate, *endDate)

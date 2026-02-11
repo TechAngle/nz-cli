@@ -27,6 +27,10 @@ var (
 	endDate   = flag.String("end-date", commons.TodayDate(), visuals.FourthStyleBold.Render(commons.EndDateArgUsage))
 	subjectId = flag.Int("subject-id", INVALID_ID, visuals.FourthStyleBold.Render(commons.SubjectIdArgUsage))
 
+	// dates flags
+	tomorrow  = flag.Bool("tomorrow", false, "Use tomorrow's date (start-date and end-date will be overwritten)")
+	yesterday = flag.Bool("yesterday", false, "Use yesterday's date (start-date and end-date will be overwritten)")
+
 	// client flags
 	diary      = flag.Bool("diary", false, visuals.MainStyleBold.Render("Show diary"))
 	grades     = flag.Bool("grades", false, visuals.MainStyleBold.Render("Show grades"))
