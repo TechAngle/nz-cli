@@ -22,7 +22,7 @@ const (
 )
 
 /*
-Sends request to nz api.
+Send request to nz api.
 
 NOTE: Requires endpoint as concatenation of original API endpoint and needed
 
