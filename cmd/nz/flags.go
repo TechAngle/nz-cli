@@ -103,10 +103,10 @@ var (
 	)
 
 	// show perfomance
-	perfomance = flag.Bool(
+	performance = flag.Bool(
 		"perf",
 		false,
-		visuals.MainStyleBold.Render(commons.PerfomanceFlagUsage),
+		visuals.MainStyleBold.Render(commons.PerformanceFlagUsage),
 	)
 
 	// mode flags

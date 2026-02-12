@@ -44,7 +44,7 @@ func processCliFlags() {
 
 	// checking for too many client flags
 	// because if we try to process few ones then nz can reject our requests and fuck us with Rate Limit (at least if they have one on their mobile api)
-	if !clientFlagsValid(*diary, *grades, *perfomance) {
+	if !clientFlagsValid(*diary, *grades, *performance) {
 		fail(visuals.ErrorStyle.Render("Invalid client flags (select only one)"))
 	}
 
@@ -73,9 +73,11 @@ func processCliFlags() {
 		fail(visuals.ErrorStyle.Render("Failed to restore session:"), err)
 	}
 
-	// replacing days if one of arguments set
+	// replacing range if one of arguments set
 	// i dont think if we put two string to stack it will eat so much memory
-	if *tomorrow {
+	if *dateFlag != "" {
+		*startDate, *endDate = *dateFlag, *dateFlag
+	} else if *tomorrow {
 		*startDate, *endDate = commons.NextDay(), commons.NextDay()
 	} else if *yesterday {
 		*startDate, *endDate = commons.PreviousDay(), commons.PreviousDay()
@@ -101,7 +103,7 @@ func processCliFlags() {
 		err = client.Grades(*startDate, *endDate, *subjectId)
 
 	// -perfomance flag
-	case *perfomance:
+	case *performance:
 		err = client.Perfomance(*startDate, *endDate)
 	}
 

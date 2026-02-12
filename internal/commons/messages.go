@@ -9,6 +9,7 @@ const (
 
 // additional flags usages
 const (
+	DateFlagUsage      = "Single day date. Sets one date in -start-date and -end-date flags. Ignores -tomorrow and -yesterday."
 	StartDateFlagUsage = "Start date. Required always. Set it if you wanna get any information starting from specific date."
 	EndDateFlagUsage   = "End date.  Required always. Set it if you wanna get any information up to specific date."
 	SubjectIdFlagUsage = "Subject ID. Required if you wanna get grades."
@@ -22,9 +23,9 @@ const (
 
 // client flags usages
 const (
-	DiaryFlagUsage      = "Show diary"
-	GradesFlagUsage     = "Show grades (requires `-subject-id` flag)"
-	PerfomanceFlagUsage = "Show perfomance"
+	DiaryFlagUsage       = "Show diary"
+	GradesFlagUsage      = "Show grades (requires `-subject-id` flag)"
+	PerformanceFlagUsage = "Show performance"
 )
 
 // mode flags usages
