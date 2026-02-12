@@ -26,9 +26,9 @@ func (c *TUI) helpMessage() *tview.TextView {
 	for key, page := range maps.All(keysHelpMap) {
 		fmt.Fprintf(
 			&helpStr,
-			"- %s - %s",
+			"- %s - %s ",
 			fmt.Sprintf("[%s::b]%s[%s::b]", thirdCode, key, thirdCode),
-			fmt.Sprintf("[%s]%s[%s]", fourthCode, page, thirdCode),
+			fmt.Sprintf("[%s]%s[%s]", fourthCode, page, fourthCode),
 		)
 	}
 

@@ -2,6 +2,13 @@ package visuals
 
 import "github.com/rivo/tview"
 
+// data state
+type userData struct {
+	username    string
+	password    string
+	currentPage string
+}
+
 // login page primitive
 func (c *TUI) loginPage() *tview.Form {
 	f := tview.NewForm()

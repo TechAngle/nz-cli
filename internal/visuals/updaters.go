@@ -83,7 +83,6 @@ func (c *TUI) updateNewsLists() {
 		// adding item to news list on news page
 		c.newsState.newsList.AddItem(mainText.String(), subText.String(), rune(0), nil)
 	}
-
 }
 
 // Start notifications status updating
@@ -97,6 +96,8 @@ func (c *TUI) StartNotificationsUpdater() {
 				time.Sleep(RequestDelay)
 
 				c.updateNewsLists()
+
+				c.app.Sync()
 			})
 
 			time.Sleep(NotificationsUpdateDelay)
@@ -127,7 +128,7 @@ func (c *TUI) StartAccountStateUpdater() {
 	}()
 }
 
-// start clock updater
+// Start clock updater
 func (c *TUI) StartClockUpdater() {
 	go func() {
 		// update clock every second because we don't need less than it

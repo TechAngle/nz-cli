@@ -4,26 +4,17 @@ import (
 	"fmt"
 	"log"
 	"nz-cli/internal/api"
-	"sync"
 
 	"github.com/rivo/tview"
 )
 
 // TODO: Finish CLI interface
 
-// data state
-type UserData struct {
-	username    string
-	password    string
-	currentPage string
-}
-
 // CLI state manager structure
 type TUI struct {
-	mutex      sync.Mutex
 	app        *tview.Application
 	pages      *tview.Pages
-	userData   *UserData
+	userData   *userData
 	mainState  *mainState
 	modalState *modalState
 	newsState  *newsState
@@ -31,7 +22,7 @@ type TUI struct {
 	client *api.NZAPIClient
 }
 
-// restore account session
+// Restore account session
 func (c *TUI) RestoreSession() {
 	err := c.client.LoadAccount()
 	if err != nil {
@@ -39,7 +30,7 @@ func (c *TUI) RestoreSession() {
 	}
 }
 
-// save account session
+// Save account session
 func (c *TUI) SaveSession() {
 	err := c.client.SaveSession()
 	if err != nil {
@@ -47,11 +38,9 @@ func (c *TUI) SaveSession() {
 	}
 }
 
-// Run cli ui
+// Run tui
 func (c *TUI) Run() {
-	log.Println("Starting...")
-
-	// loading account
+	// log.Println("Starting...")
 	// Loading it here, because in NewCLI it will cause troubles if we don't need account before running
 	c.RestoreSession()
 	c.renderPages()
@@ -74,7 +63,7 @@ func NewCLI() (cli *TUI, err error) {
 
 	return &TUI{
 		// states
-		userData:   &UserData{},
+		userData:   &userData{},
 		mainState:  initMainState(),
 		modalState: initModalState(),
 		newsState:  initNewsState(),

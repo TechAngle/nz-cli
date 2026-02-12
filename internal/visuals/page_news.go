@@ -18,7 +18,11 @@ func initNewsState() *newsState {
 func (c *TUI) newsPage() *tview.Flex {
 	flex := tview.NewFlex()
 
-	flex.AddItem(c.newsState.newsList, 0, 1, true).
+	flex.
+		AddItem(tview.NewTextView().
+			SetText("Press R to update news").SetTextAlign(tview.AlignCenter), 2, 1, false).
+		AddItem(c.newsState.newsList, 0, 1, true).
+		SetDirection(tview.FlexRow).
 		SetBorder(true).
 		SetTitle("News").
 		SetTitleAlign(tview.AlignBottom)

@@ -1,6 +1,8 @@
 package visuals
 
 import (
+	"strings"
+
 	"github.com/rivo/tview"
 )
 
@@ -46,6 +48,11 @@ func (c *TUI) mainPage() *tview.Flex {
 
 	// adding components
 	flex.
+		// banner
+		AddItem(tview.NewTextView().
+			SetText(Banner()).
+			SetTextAlign(tview.AlignTop),
+			len(strings.Split(Banner(), "\n"))-1, 1, false).
 		// logged account information
 		AddItem(c.mainState.loggedAccountLabel, 1, 1, false).
 		// time clock
@@ -59,7 +66,7 @@ func (c *TUI) mainPage() *tview.Flex {
 		// latest notifications
 		AddItem(c.mainState.shortNewsList, 0, 1, true).
 		// help message
-		AddItem(c.helpMessage(), 0, 1, false)
+		AddItem(c.helpMessage(), 1, 0, false)
 
 	// flex settings
 	flex.SetDirection(tview.FlexRow). // everythin should be in the row

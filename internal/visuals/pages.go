@@ -52,7 +52,10 @@ func (c *TUI) renderPages() {
 			visiblePages := c.pages.GetPageNames(true)
 			if len(visiblePages) != 0 {
 				if visiblePages[0] == NewsPage {
-					// TODO: Update news
+					// updating lists
+					c.updateNewsLists()
+
+					c.app.Sync()
 				}
 			}
 
