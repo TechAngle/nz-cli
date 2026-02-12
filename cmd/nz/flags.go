@@ -18,25 +18,108 @@ const (
 // flags list
 var (
 	// login flags
-	login    = flag.Bool("login", false, visuals.ThirdStyleBold.Render("Login to the system. Should be set with --username and --password flags"))
-	username = flag.String("username", "", visuals.ThirdStyleBold.Render("Username. Required if -login argument is set"))
-	password = flag.String("password", "", visuals.ThirdStyleBold.Render("Password. Required if -login argument is set"))
+
+	// whether user wants to login (requires set -username and -password)
+	login = flag.Bool(
+		"login",
+		false,
+		visuals.ThirdStyleBold.Render(commons.LoginFlagUsage),
+	)
+
+	// username for login
+	username = flag.String(
+		"username",
+		"",
+		visuals.ThirdStyleBold.Render(commons.UsernameFlagUsage),
+	)
+
+	// password for login
+	password = flag.String(
+		"password",
+		"",
+		visuals.ThirdStyleBold.Render(commons.PasswordFlagUsage),
+	)
 
 	// additional flags
-	startDate = flag.String("start-date", commons.TodayDate(), visuals.FourthStyleBold.Render(commons.StartDateArgUsage))
-	endDate   = flag.String("end-date", commons.TodayDate(), visuals.FourthStyleBold.Render(commons.EndDateArgUsage))
-	subjectId = flag.Int("subject-id", INVALID_ID, visuals.FourthStyleBold.Render(commons.SubjectIdArgUsage))
 
-	// dates flags
-	tomorrow  = flag.Bool("tomorrow", false, "Use tomorrow's date (start-date and end-date will be overwritten)")
-	yesterday = flag.Bool("yesterday", false, "Use yesterday's date (start-date and end-date will be overwritten)")
+	// use some specific day
+	dateFlag = flag.String(
+		"date",
+		"",
+		visuals.FourthStyle.Render(),
+	)
 
-	// client flags
-	diary      = flag.Bool("diary", false, visuals.MainStyleBold.Render("Show diary"))
-	grades     = flag.Bool("grades", false, visuals.MainStyleBold.Render("Show grades"))
-	perfomance = flag.Bool("perf", false, visuals.MainStyleBold.Render("Show perfomance"))
+	// range start
+	startDate = flag.String(
+		"start-date",
+		commons.TodayDate(),
+		visuals.FourthStyleBold.Render(commons.StartDateFlagUsage),
+	)
+
+	// range end
+	endDate = flag.String(
+		"end-date",
+		commons.TodayDate(),
+		visuals.FourthStyleBold.Render(commons.EndDateFlagUsage),
+	)
+
+	// specific subject id
+	subjectId = flag.Int(
+		"subject-id",
+		INVALID_ID,
+		visuals.FourthStyleBold.Render(commons.SubjectIdFlagUsage),
+	)
+
+	// date-for-use flags
+
+	// whether use tomorrow's date
+	tomorrow = flag.Bool(
+		"tomorrow",
+		false,
+		visuals.SecondStyle.Render(commons.TomorrowFlagUsage),
+	)
+
+	// whether use yesterday's date
+	yesterday = flag.Bool(
+		"yesterday",
+		false,
+		visuals.SecondStyle.Render(commons.TomorrowFlagUsage),
+	)
+
+	// client flags (requires start-date and end-date)
+
+	// show diary
+	diary = flag.Bool(
+		"diary",
+		false,
+		visuals.MainStyleBold.Render(commons.DiaryFlagUsage),
+	)
+
+	// show grades of specific subject using its ID
+	grades = flag.Bool(
+		"grades",
+		false,
+		visuals.MainStyleBold.Render(commons.GradesFlagUsage),
+	)
+
+	// show perfomance
+	perfomance = flag.Bool(
+		"perf",
+		false,
+		visuals.MainStyleBold.Render(commons.PerfomanceFlagUsage),
+	)
 
 	// mode flags
-	data = flag.Bool("data", true, visuals.SecondStyle.Render("Get only data from API and format it (API mode)"))
-	tui  = flag.Bool("tui", false, visuals.SecondStyle.Render("Run TUI (Terminal User Interface) (ONLY IN PROGRESS)"))
+
+	// whether give only data
+	data = flag.Bool(
+		"data",
+		true,
+		visuals.SecondStyle.Render(commons.DataFlagUsage))
+
+	// whether use TUI version (experimental)
+	tui = flag.Bool(
+		"tui",
+		false,
+		visuals.SecondStyle.Render(commons.TUIFlagUsage))
 )
