@@ -17,18 +17,10 @@ import (
 
 // 24-bit colour codes
 var (
-	mainXTermCode   = tcell.NewRGBColor(252, 248, 248) // pastel white
-	secondXTermCode = tcell.NewRGBColor(251, 239, 239) // pastel pink
-	thirdXTermCode  = tcell.NewRGBColor(249, 223, 223) // cream pink
-	fourthXTermCode = tcell.NewRGBColor(245, 175, 175) // peach
-)
-
-// HEX colour codes
-const (
-	mainCode   string = "#FCF8F8" // pastel white
-	secondCode string = "#FBEFEF" // pastel pink
-	thirdCode  string = "#F9DFDF" // cream pink
-	fourthCode string = "#F5AFAF" // peach
+	mainXTermCode   = tcell.NewRGBColor(252, 248, 248)
+	secondXTermCode = tcell.NewRGBColor(251, 239, 239)
+	thirdXTermCode  = tcell.NewRGBColor(249, 223, 223)
+	fourthXTermCode = tcell.NewRGBColor(245, 175, 175)
 )
 
 // grades HEX colour codes
@@ -37,6 +29,14 @@ const (
 	gradeLowCode  string = "#f9ad6a" // Dusty orange (4-6)
 	gradeMidCode  string = "#d4e157" // Sandy lime (7-9)
 	gradeHighCode string = "#8ce99a" // Mint green (10-12)
+)
+
+// HEX colour codes
+const (
+	mainCode   string = "#FFF0F5" // pastel white
+	secondCode string = "#FFB6C1" // pastel pink
+	thirdCode  string = "#FF69B4" // cream pink
+	fourthCode string = "#C71585" // peach
 )
 
 // pastel white style
