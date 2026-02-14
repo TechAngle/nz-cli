@@ -19,23 +19,23 @@ const (
 	endOfYear   = "end-of-year"
 )
 
-// replace shortcuts with real dates
+type ShortcutMap map[string](func() string)
+
+var (
+	shortcutsMap ShortcutMap = ShortcutMap{
+		today:       TodayDate,
+		weekStart:   WeekStart,
+		weekEnd:     WeekEnd,
+		startOfYear: StartOfSchoolYear,
+		endOfYear:   EndOfSchoolYear,
+	}
+)
+
+// Get formatted date from shortcut
 func ShortcutToDate(date string) string {
 	// parsing start date
-	// NOTE: I think about changing this to map[string]string
-	switch date {
-	case today:
-		date = TodayDate()
-	case weekStart:
-		date = WeekStart()
-	case weekEnd:
-		date = WeekEnd()
-	case startOfYear:
-		date = StartOfSchoolYear()
-	case endOfYear:
-		date = EndOfSchoolYear()
-	default:
-
+	if shortcutFunc, ok := shortcutsMap[date]; ok {
+		return shortcutFunc()
 	}
 
 	return date

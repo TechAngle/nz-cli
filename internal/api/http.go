@@ -38,7 +38,7 @@ func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload Payloa
 
 	apiResponse, err := c.sendRequest(req)
 	if err != nil {
-		return fmt.Errorf("failed to send request")
+		return fmt.Errorf("failed to send request: %v", err)
 	}
 	defer apiResponse.Body.Close()
 
