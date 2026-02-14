@@ -2,16 +2,14 @@ package api
 
 import (
 	"fmt"
-	"nz-cli/internal/models"
 	"strconv"
 )
 
 // Get notifications.
 // Method: GET
-func (c *NZAPIClient) Notifications() (*models.Notifications, error) {
-	var response models.Notifications
-	err := c.SendRequest(GetMethod, ApiEndpoint+NotificationsEndpoint, nil, &response)
-	if err != nil {
+func (c *NZAPIClient) Notifications() (*NotificationsResponse, error) {
+	var response NotificationsResponse
+	if err := c.SendRequest(GetMethod, apiEndpoint+notificationsEndpoint, nil, &response); err != nil {
 		return nil, fmt.Errorf("failed to send notifications request: %v", err)
 	}
 
@@ -27,8 +25,8 @@ func (c *NZAPIClient) Notifications() (*models.Notifications, error) {
 // If error occured - returns -1 (just because count of unread notifications cannot be negative)
 // Method: GET
 func (c *NZAPIClient) UnreadNotifications() (int, error) {
-	var response models.UnreadNotificationsResponse
-	err := c.SendRequest(GetMethod, ApiEndpoint+UnreadNotificationsEndpoint, nil, &response)
+	var response UnreadNotificationsResponse
+	err := c.SendRequest(GetMethod, apiEndpoint+unreadNotificationsEndpoint, nil, &response)
 	if err != nil {
 		return -1, fmt.Errorf("failed to get qty of unread notifications: %v", err)
 	}

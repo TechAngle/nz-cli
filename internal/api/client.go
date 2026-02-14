@@ -3,26 +3,10 @@ package api
 import (
 	"fmt"
 	"net/http"
-	"nz-cli/internal/commons"
-	"path/filepath"
 
 	tls_client "github.com/bogdanfinn/tls-client"
 	"github.com/bogdanfinn/tls-client/profiles"
-	cookiejar "github.com/juju/persistent-cookiejar"
 )
-
-var (
-	SessionCookiesBase = filepath.Join(commons.GetConfigPath(), "nzCookies.json")
-	AccountStateBase   = filepath.Join(commons.GetConfigPath(), "nzAccountState.json")
-)
-
-const (
-	// User-Agent Header
-	UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-)
-
-// cookies jar for http.Client
-var cookiesJar *cookiejar.Jar
 
 // Main nz api client structure
 type NZAPIClient struct {
@@ -36,7 +20,7 @@ type NZAPIClient struct {
 	cookies []*http.Cookie
 }
 
-// is user authorized and has access token
+// Is user authorized and has access token
 func (c NZAPIClient) Authorized() bool {
 	return c.account != nil && c.account.AccessToken != ""
 }
@@ -54,8 +38,7 @@ func (c NZAPIClient) Account() AccountState {
 // Save current session.
 // Returns error if something has gone wrong
 func (c NZAPIClient) SaveSession() error {
-	err := cookiesJar.Save()
-	err = c.account.Save(AccountStateBase)
+	err := c.account.Save(AccountStateBase)
 	return err
 }
 
@@ -71,21 +54,9 @@ func (c *NZAPIClient) LoadAccount() error {
 	return nil
 }
 
-// Create new api client
-func NewApiClient() (apiClient *NZAPIClient, err error) {
-	// New func loads from filename in private method newFromTime
-	// that's why it has not Load() method ._.
-	// p.s. i hate its dev
-	cookiesJar, err = cookiejar.New(&cookiejar.Options{
-		Filename: SessionCookiesBase,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("failed to create cookie jar: %v", err)
-	}
-
-	// creating client with session, impersonating android chrome
-	// because we use nz.ua mobile api
-	options := []tls_client.HttpClientOption{
+// Returns tls client options
+func tlsClientOptions() *[]tls_client.HttpClientOption {
+	return &[]tls_client.HttpClientOption{
 		tls_client.WithCookieJar(tls_client.NewCookieJar(
 			tls_client.WithAllowEmptyCookies(),
 		)),
@@ -93,13 +64,29 @@ func NewApiClient() (apiClient *NZAPIClient, err error) {
 		tls_client.WithClientProfile(profiles.Chrome_131),
 		tls_client.WithNotFollowRedirects(),
 	}
+}
 
-	client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), options...)
+// Creates new http client with options
+func newTlsClient() (*tls_client.HttpClient, error) {
+	// creating client with session, impersonating android chrome
+	// because we use nz.ua mobile api
+	options := tlsClientOptions()
+	client, err := tls_client.NewHttpClient(tls_client.NewNoopLogger(), *options...)
 	if err != nil {
 		return nil, fmt.Errorf("faield to create fhttp client: %v", err)
 	}
 
+	return &client, nil
+}
+
+// Create new api client
+func NewAPIClient() (*NZAPIClient, error) {
+	client, err := newTlsClient()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create tls client: %v", err)
+	}
+
 	return &NZAPIClient{
-		client: client,
+		client: *client,
 	}, nil
 }

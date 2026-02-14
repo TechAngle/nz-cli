@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"nz-cli/internal/commons"
 	"time"
 )
 
@@ -10,11 +9,11 @@ import (
 // If end date was before start date - it switches them.
 func ValidatePayloadDates(startDate string, endDate string) (start string, end string, err error) {
 	// parsing periods
-	startTime, err := time.Parse(commons.DateFormat, startDate)
+	startTime, err := time.Parse(DateFormat, startDate)
 	if err != nil {
 		return "", "", fmt.Errorf("failed to parse start date: %v", err)
 	}
-	endTime, err := time.Parse(commons.DateFormat, endDate)
+	endTime, err := time.Parse(DateFormat, endDate)
 	if err != nil {
 		return "", "", fmt.Errorf("failed to parse end date: %v", err)
 	}

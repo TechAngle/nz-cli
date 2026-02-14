@@ -2,18 +2,18 @@ package api
 
 // More endpoints you could find at https://github.com/Artemka1806/api-mobile.nz.ua
 const (
-	ApiEndpoint = "https://api-mobile.nz.ua/v2"
+	apiEndpoint = "https://api-mobile.nz.ua/v2"
 
-	LoginEndpoint        = "/user/login"
-	TestEndpoint         = "/user/test" // Useless
-	PerfomanceEndpoint   = "/schedule/student-performance"
-	DiaryEndpoint        = "/schedule/diary"
-	GradesEndpoint       = "/schedule/subject-grades"
-	RefreshTokenEndpoint = "/user/refresh-token"
+	loginEndpoint        = "/user/login"
+	perfomanceEndpoint   = "/schedule/student-performance"
+	diaryEndpoint        = "/schedule/diary"
+	gradesEndpoint       = "/schedule/subject-grades"
+	refreshTokenEndpoint = "/user/refresh-token"
 
-	NotificationsEndpoint       = "/notification/"
-	UnreadNotificationsEndpoint = "/notification/unread-qty"
+	notificationsEndpoint       = "/notification/"
+	unreadNotificationsEndpoint = "/notification/unread-qty"
 
-	TimetableEndpoint = "/schedule/timetable"          // useless, but i'll leave it here
-	MarksListEndpoint = "/personnel-journal/mark-list" // also useless, but ok
+	testEndpoint      = "/user/test"                   // Useless
+	timetableEndpoint = "/schedule/timetable"          // useless
+	marksListEndpoint = "/personnel-journal/mark-list" // useless
 )
