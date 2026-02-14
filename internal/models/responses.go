@@ -21,21 +21,27 @@ type LoginResponse struct {
 	ErrorMessage string `json:"error_message"`
 }
 
+type MissedInfo struct {
+	Days    int `json:"days"`
+	Lessons int `json:"lessons"`
+}
+
+type Mark struct {
+	Value string `json:"value"`
+	Type  string `json:"type"`
+}
+
+type Subject struct {
+	SubjectID        string `json:"subject_id"`
+	SubjectName      string `json:"subject_name"`
+	SubjectShortname string `json:"subject_shortname"`
+	Marks            []Mark `json:"marks"`
+}
+
 type PerfomanceResponse struct {
-	Missed struct {
-		Days    int `json:"days"`
-		Lessons int `json:"lessons"`
-	} `json:"missed"`
-	Subjects []struct {
-		SubjectID        string `json:"subject_id"`
-		SubjectName      string `json:"subject_name"`
-		SubjectShortname string `json:"subject_shortname"`
-		Marks            []struct {
-			Value string `json:"value"`
-			Type  string `json:"type"`
-		} `json:"marks"`
-	} `json:"subjects"`
-	ErrorMessage string `json:"error_message"`
+	Missed       MissedInfo `json:"missed"`
+	Subjects     []Subject  `json:"subjects"`
+	ErrorMessage string     `json:"error_message"`
 }
 
 type DiaryResponse struct {

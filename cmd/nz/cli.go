@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"nz-cli/internal/client"
+	"nz-cli/internal/cli"
 	"nz-cli/internal/commons"
 	"nz-cli/internal/visuals"
 )
@@ -53,7 +53,7 @@ func processCliFlags() {
 	validateDates()
 
 	// Initializating client
-	client, err := client.NewClient()
+	client, err := cli.NewClient()
 	if err != nil {
 		fail(visuals.ErrorStyle.Render("Failed to initialize client:"), err)
 	}
@@ -102,9 +102,9 @@ func processCliFlags() {
 
 		err = client.Grades(*startDate, *endDate, *subjectId)
 
-	// -perfomance flag
+	// -perf flag
 	case *performance:
-		err = client.Perfomance(*startDate, *endDate)
+		err = client.Performance(*startDate, *endDate)
 	}
 
 	// if any error occurred we'll just close program with status code 1, why not.

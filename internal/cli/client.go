@@ -1,4 +1,4 @@
-package client
+package cli
 
 import (
 	"fmt"
@@ -17,17 +17,19 @@ import (
 	"golang.org/x/term"
 )
 
+// API client wrapper
 type Client struct {
+	// API client
 	client *api.NZAPIClient
 }
 
-// is client authorized
+// Is client authorized
 func (c *Client) IsAuthorized() bool {
 	return c.client.Authorized()
 }
 
-// Print perfomance
-func (c *Client) Perfomance(startDate string, endDate string) error {
+// Print performance
+func (c *Client) Performance(startDate string, endDate string) error {
 	if !c.client.Authorized() {
 		return fmt.Errorf("not authorized")
 	}
@@ -36,7 +38,7 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 		return fmt.Errorf("invalid dates range: %s - %s", startDate, endDate)
 	}
 
-	perfomance, err := c.client.Perfomance(models.DefaultPayload{
+	performance, err := c.client.Perfomance(models.DefaultPayload{
 		StartDate: startDate,
 		EndDate:   endDate,
 	})
@@ -47,10 +49,17 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 	// headers: Subject Name | Marks | Average
 	headers := []string{"Subject", "Marks", "Semestr"}
 	grades := [][]string{}
-	for _, subject := range perfomance.Subjects {
-		subjectRow := []string{}
-		average := []int{}
+
+	// Code below contains such logic:
+	// Initially, we extracting all subjects from subjects and mixing them with subjects with identical names.
+	// Because nz.ua somehow returns different IDs for one subject.
+	subjects := NormalizeSubjects(performance.Subjects)
+
+	for _, subject := range subjects {
 		var marksRow strings.Builder
+
+		subjectRow := []string{}
+		marks := make([]int, 0, len(subject.Marks))
 
 		// Setting subject name
 		subjectRow = append(subjectRow, fmt.Sprintf("%s [ID: %s]", subject.SubjectName, subject.SubjectID))
@@ -66,7 +75,7 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 			if strings.HasPrefix(strings.ToLower(mark.Type), "тем") && mark.Value != "Н" {
 				// log.Println("Tem:", mark.Value, mark.Type)
 				if i, err := strconv.Atoi(mark.Value); err == nil {
-					average = append(average, i)
+					marks = append(marks, i)
 				}
 			}
 
@@ -78,15 +87,27 @@ func (c *Client) Perfomance(startDate string, endDate string) error {
 		// adding marks row
 		subjectRow = append(subjectRow, marksRow.String())
 
-		// adding average
-		averageMark := utils.CalculateAverage[float32, int](average)
-		// log.Println("Average:", averageMark)
-		subjectRow = append(subjectRow, fmt.Sprintf("%d", int(averageMark)))
+		// adding average if it not 0, if not - just empty string
+		// log.Println("[DEBUG] Marks:", marks)
+		averageMark := utils.CalculateAverage[float32, int](marks)
+		semesterMark := strconv.Itoa(int(averageMark))
+		if averageMark == 0 {
+			semesterMark = ""
+		}
+
+		subjectRow = append(subjectRow, fmt.Sprintf("%s", semesterMark))
 		grades = append(grades, subjectRow)
+	}
+
+	// setting terminal width
+	width, _, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		return fmt.Errorf("[performance] failed to get terminal size:")
 	}
 
 	table := table.New().
 		Wrap(true).
+		Width(width).
 		Border(lipgloss.NormalBorder()).
 		BorderStyle(visuals.ThirdStyleBold).
 		Headers(headers...).
