@@ -52,8 +52,8 @@ func (c *TUI) Run() {
 	}
 }
 
-func NewCLI() (cli *TUI, err error) {
-	client, err := api.NewApiClient()
+func NewTUI() (cli *TUI, err error) {
+	client, err := api.NewAPIClient()
 	if err != nil {
 		return nil, fmt.Errorf("failed to create api client: %v", err)
 	}

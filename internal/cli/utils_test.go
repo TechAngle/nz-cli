@@ -1,10 +1,11 @@
 package cli
 
 import (
-	"nz-cli/internal/models"
+	"nz-cli/internal/api"
 	"testing"
 )
 
+// Test name normalization
 func TestNormalizeName(t *testing.T) {
 	extraStops := "Історія України.."
 	extraStopsResult := "Історія України"
@@ -12,8 +13,8 @@ func TestNormalizeName(t *testing.T) {
 	extraWhitespaces := "Українська мова "
 	extraWhitespacesResult := "Українська мова"
 
-	stopsSanitized := NormalizeName(extraStops)
-	spacesSanitized := NormalizeName(extraWhitespaces)
+	stopsSanitized := normalizeName(extraStops)
+	spacesSanitized := normalizeName(extraWhitespaces)
 
 	if stopsSanitized != extraStopsResult {
 		t.Fatalf("invalid sanitized stops: %s", stopsSanitized)
@@ -28,12 +29,13 @@ func TestNormalizeName(t *testing.T) {
 	t.Logf("Start: %s -> Final: %s (=%s)", extraWhitespaces, spacesSanitized, extraWhitespacesResult)
 }
 
+// Test subjects normalization
 func TestNormalizeSubjects(t *testing.T) {
-	testSubjects := []models.Subject{
+	testSubjects := []api.Subject{
 		{
 			SubjectName: "test1",
 			SubjectID:   "12345",
-			Marks: []models.Mark{
+			Marks: []api.Mark{
 				{
 					Value: "1",
 				},
@@ -48,7 +50,7 @@ func TestNormalizeSubjects(t *testing.T) {
 		{
 			SubjectName: "test1",
 			SubjectID:   "12346", // different number
-			Marks: []models.Mark{
+			Marks: []api.Mark{
 				{
 					Value: "1",
 				},
@@ -62,7 +64,7 @@ func TestNormalizeSubjects(t *testing.T) {
 		},
 	}
 
-	subjectsList := NormalizeSubjects(testSubjects)
+	subjectsList := normalizeSubjects(testSubjects)
 
 	// must be one element
 	if len(subjectsList) != 1 {

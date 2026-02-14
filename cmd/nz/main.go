@@ -4,39 +4,25 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"nz-cli/internal/cli"
+	"nz-cli/internal/commons"
 	"nz-cli/internal/visuals"
-	"os"
 )
 
-const (
-	/*
-		fr, idk which i should use here, but i guess it should be negative.
-		If it positive, then such ID will be invalid, so let it be -100 at least.
+// mode flags
+var (
+	// whether give only data
+	data = flag.Bool(
+		"data",
+		true,
+		visuals.SecondStyle.Render(commons.DataFlagUsage))
 
-		P.S. I'll hate nz devs (i am already are, whatever) if they would add negatives as IDs.
-	*/
-	INVALID_ID = -100
+	// whether use TUI version (experimental)
+	tui = flag.Bool(
+		"tui",
+		false,
+		visuals.SecondStyle.Render(commons.TUIFlagUsage))
 )
-
-func clientFlagsValid(flags ...bool) bool {
-	// checking how many flags are true
-	amount := 0
-
-	for _, f := range flags {
-		if f {
-			amount++
-		}
-	}
-
-	// if more than one flag are true we failing attempt
-	return amount == 1
-}
-
-// Print error and exit with code 1
-func fail(message string, v ...any) {
-	fmt.Println(visuals.ErrorStyle.Render(message), v)
-	os.Exit(1)
-}
 
 func main() {
 	flag.Parse()
@@ -45,14 +31,22 @@ func main() {
 	case *tui:
 		// setting -data flag to false
 		*data = false
-		cli, err := visuals.NewCLI()
+		tui, err := visuals.NewTUI()
 		if err != nil {
 			log.Panicln(err)
 		}
 
-		cli.Run()
+		tui.Run()
 		fmt.Println("TUI feature in development at the moment")
 	case *data:
-		processCliFlags()
+		c, err := cli.NewClient()
+		if err != nil {
+			log.Panicln("failed to create client:", err)
+		}
+
+		err = c.ProcessCLIFlags()
+		if err != nil {
+			log.Panicln("failed to process CLI flags:", err)
+		}
 	}
 }

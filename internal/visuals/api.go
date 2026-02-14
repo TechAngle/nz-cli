@@ -3,7 +3,7 @@ package visuals
 import (
 	"fmt"
 	"log"
-	"nz-cli/internal/models"
+	"nz-cli/internal/api"
 )
 
 // Login to system
@@ -14,7 +14,7 @@ func (c *TUI) Login() error {
 	}
 	log.Println("User data is valid, logging in....")
 
-	err := c.client.Login(models.LoginPayload{
+	err := c.client.Login(api.LoginPayload{
 		Username: c.userData.username,
 		Password: c.userData.password,
 	})

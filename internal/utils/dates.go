@@ -1,7 +1,8 @@
-package commons
+package utils
 
 import (
 	"fmt"
+	"nz-cli/internal/api"
 	"time"
 )
 
@@ -9,19 +10,50 @@ import (
  NOTE: I moved functions here because in utils package they cause `import cycle` error :\
 */
 
+// Shortcut
+const (
+	today       = "today"
+	weekStart   = "week-start"
+	weekEnd     = "week-end"
+	startOfYear = "start-of-year"
+	endOfYear   = "end-of-year"
+)
+
+// replace shortcuts with real dates
+func ShortcutToDate(date string) string {
+	// parsing start date
+	// NOTE: I think about changing this to map[string]string
+	switch date {
+	case today:
+		date = TodayDate()
+	case weekStart:
+		date = WeekStart()
+	case weekEnd:
+		date = WeekEnd()
+	case startOfYear:
+		date = StartOfSchoolYear()
+	case endOfYear:
+		date = EndOfSchoolYear()
+	default:
+
+	}
+
+	return date
+}
+
 // Get todays date in correct format
 func TodayDate() string {
-	return time.Now().Format(DateFormat)
+	return time.Now().Format(api.DateFormat)
 }
 
 // Get tomorrow's date
 func NextDay() string {
-	return time.Now().AddDate(0, 0, 1).Format(DateFormat)
+	return time.Now().AddDate(0, 0, 1).Format(api.DateFormat)
 }
 
 // Get yesterday's date
 func PreviousDay() string {
-	return time.Now().AddDate(0, 0, -1).Format(DateFormat)
+	return time.Now().AddDate(0, 0, -1).Format(api.DateFormat)
 }
 
 // Get start of current week
@@ -40,7 +72,7 @@ func WeekStart() string {
 		t = t.AddDate(0, 0, -int(wd)+1)
 	}
 
-	return t.Format(DateFormat)
+	return t.Format(api.DateFormat)
 }
 
 // Get end of current week.
@@ -59,7 +91,7 @@ func WeekEnd() string {
 		t = t.AddDate(0, 0, 7-int(wd))
 	}
 
-	return t.Format(DateFormat)
+	return t.Format(api.DateFormat)
 }
 
 // Get the start of school year

@@ -2,9 +2,7 @@ package cli
 
 import (
 	"fmt"
-	"log"
 	"nz-cli/internal/api"
-	"nz-cli/internal/models"
 	"nz-cli/internal/utils"
 	"nz-cli/internal/visuals"
 	"os"
@@ -18,18 +16,13 @@ import (
 )
 
 // API client wrapper
-type Client struct {
+type CLIClient struct {
 	// API client
 	client *api.NZAPIClient
 }
 
-// Is client authorized
-func (c *Client) IsAuthorized() bool {
-	return c.client.Authorized()
-}
-
 // Print performance
-func (c *Client) Performance(startDate string, endDate string) error {
+func (c *CLIClient) Performance(startDate string, endDate string) error {
 	if !c.client.Authorized() {
 		return fmt.Errorf("not authorized")
 	}
@@ -38,7 +31,7 @@ func (c *Client) Performance(startDate string, endDate string) error {
 		return fmt.Errorf("invalid dates range: %s - %s", startDate, endDate)
 	}
 
-	performance, err := c.client.Perfomance(models.DefaultPayload{
+	performance, err := c.client.Perfomance(api.DefaultPayload{
 		StartDate: startDate,
 		EndDate:   endDate,
 	})
@@ -53,7 +46,7 @@ func (c *Client) Performance(startDate string, endDate string) error {
 	// Code below contains such logic:
 	// Initially, we extracting all subjects from subjects and mixing them with subjects with identical names.
 	// Because nz.ua somehow returns different IDs for one subject.
-	subjects := NormalizeSubjects(performance.Subjects)
+	subjects := normalizeSubjects(performance.Subjects)
 
 	for _, subject := range subjects {
 		var marksRow strings.Builder
@@ -118,22 +111,8 @@ func (c *Client) Performance(startDate string, endDate string) error {
 	return nil
 }
 
-// Update refresh token
-func (c *Client) RefreshToken() error {
-	accessToken, err := c.client.RefreshToken(models.RefreshTokenPayload{
-		RefreshToken: c.client.Account().RefreshToken,
-	})
-	if err != nil {
-		return fmt.Errorf("failed to refresh token: %v", err)
-	}
-
-	c.client.SetNewAccessToken(accessToken)
-
-	return nil
-}
-
 // Print grades
-func (c *Client) Grades(startDate string, endDate string, subjectId int) error {
+func (c *CLIClient) Grades(startDate string, endDate string, subjectId int) error {
 	if !c.client.Authorized() {
 		return fmt.Errorf("not authorized")
 	}
@@ -142,7 +121,7 @@ func (c *Client) Grades(startDate string, endDate string, subjectId int) error {
 		return fmt.Errorf("invalid dates range: %s - %s", startDate, endDate)
 	}
 
-	grades, err := c.client.Grades(models.GradesPayload{
+	grades, err := c.client.Grades(api.GradesPayload{
 		StartDate: startDate,
 		EndDate:   endDate,
 		StudentID: c.client.Account().StudentID,
@@ -178,7 +157,7 @@ func (c *Client) Grades(startDate string, endDate string, subjectId int) error {
 }
 
 // Get diary
-func (c *Client) Diary(startDate string, endDate string) error {
+func (c *CLIClient) Diary(startDate string, endDate string) error {
 	if !c.client.Authorized() {
 		return fmt.Errorf("not authorized")
 	}
@@ -187,7 +166,7 @@ func (c *Client) Diary(startDate string, endDate string) error {
 		return fmt.Errorf("invalid dates range: %s - %s", startDate, endDate)
 	}
 
-	diary, err := c.client.Diary(models.DefaultPayload{
+	diary, err := c.client.Diary(api.DefaultPayload{
 		StartDate: startDate,
 		EndDate:   endDate,
 		StudentID: c.client.Account().StudentID,
@@ -238,55 +217,4 @@ func (c *Client) Diary(startDate string, endDate string) error {
 	fmt.Println(table)
 
 	return nil
-}
-
-// Login to system
-func (c *Client) Login(username string, password string) error {
-	if c.client.Authorized() {
-		log.Println("You're already logged to system!")
-		return nil
-	}
-
-	if username == "" || password == "" {
-		return fmt.Errorf("invalid credentials")
-	}
-
-	err := c.client.Login(models.LoginPayload{
-		Username: username,
-		Password: password,
-	})
-	if err != nil {
-		return fmt.Errorf("failed to login: %v", err)
-	}
-
-	// saving immediately
-	err = c.client.SaveSession()
-	if err != nil {
-		fmt.Println("Failed to save session:", err)
-		return nil
-	}
-
-	return nil
-}
-
-// restore session
-func (c *Client) RestoreSession() error {
-	err := c.client.LoadAccount()
-	if err != nil {
-		return fmt.Errorf("failed to load account: %v", err)
-	}
-
-	return nil
-}
-
-// initializate new api client wrapper
-func NewClient() (*Client, error) {
-	client, err := api.NewApiClient()
-	if err != nil {
-		return nil, fmt.Errorf("failed to create client: %v", err)
-	}
-
-	return &Client{
-		client: client,
-	}, nil
 }

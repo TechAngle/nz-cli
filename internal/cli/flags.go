@@ -1,18 +1,20 @@
-package main
+package cli
 
 import (
 	"flag"
 	"nz-cli/internal/commons"
+	"nz-cli/internal/utils"
 	"nz-cli/internal/visuals"
 )
 
-// Shortcut
 const (
-	Today       = "today"
-	WeekStart   = "week-start"
-	WeekEnd     = "week-end"
-	StartOfYear = "start-of-year"
-	EndOfYear   = "end-of-year"
+	/*
+		fr, idk which i should use here, but i guess it should be negative.
+		If it positive, then such ID will be invalid, so let it be -100 at least.
+
+		P.S. I'll hate nz devs (i am already are, whatever) if they would add negatives as IDs.
+	*/
+	INVALID_ID = -100
 )
 
 // flags list
@@ -52,14 +54,14 @@ var (
 	// range start
 	startDate = flag.String(
 		"start-date",
-		commons.TodayDate(),
+		utils.TodayDate(),
 		visuals.FourthStyleBold.Render(commons.StartDateFlagUsage),
 	)
 
 	// range end
 	endDate = flag.String(
 		"end-date",
-		commons.TodayDate(),
+		utils.TodayDate(),
 		visuals.FourthStyleBold.Render(commons.EndDateFlagUsage),
 	)
 
@@ -108,18 +110,4 @@ var (
 		false,
 		visuals.MainStyleBold.Render(commons.PerformanceFlagUsage),
 	)
-
-	// mode flags
-
-	// whether give only data
-	data = flag.Bool(
-		"data",
-		true,
-		visuals.SecondStyle.Render(commons.DataFlagUsage))
-
-	// whether use TUI version (experimental)
-	tui = flag.Bool(
-		"tui",
-		false,
-		visuals.SecondStyle.Render(commons.TUIFlagUsage))
 )
