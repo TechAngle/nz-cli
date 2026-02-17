@@ -41,7 +41,7 @@ func (c *CLIClient) Diary(startDate string, endDate string) error {
 // Returns dates list as headers and hometasks as rows
 func diaryDates(dates *[]api.Date) ([]string, []string) {
 	datesList := make([]string, 0, len(*dates))
-	hometasksRow := make([]string, 0, len(*dates))
+	hometasksRow := make([]string, len(*dates))
 
 	// going through dates
 	for i, date := range *dates {
