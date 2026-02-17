@@ -44,32 +44,34 @@ type PerfomanceResponse struct {
 	ErrorMessage string     `json:"error_message"`
 }
 
+type Date struct {
+	Date  string `json:"date"`
+	Calls []struct {
+		CallID        int    `json:"call_id"`
+		CallNumber    int    `json:"call_number"`
+		CallTimeStart string `json:"call_time_start"`
+		CallTimeEnd   string `json:"call_time_end"`
+		Subjects      []struct {
+			Lesson []struct {
+				Type    string `json:"type"`
+				Mark    string `json:"mark"`
+				Comment string `json:"comment"`
+			} `json:"lesson"`
+			Hometask                 []string `json:"hometask"`
+			DistanceHometaskID       any      `json:"distance_hometask_id"`
+			DistanceHometaskIsClosed any      `json:"distance_hometask_is_closed"`
+			SubjectName              string   `json:"subject_name"`
+			Room                     string   `json:"room"`
+			Teacher                  struct {
+				ID   int    `json:"id"`
+				Name string `json:"name"`
+			} `json:"teacher"`
+		} `json:"subjects"`
+	} `json:"calls"`
+}
+
 type DiaryResponse struct {
-	Dates []struct {
-		Date  string `json:"date"`
-		Calls []struct {
-			CallID        int    `json:"call_id"`
-			CallNumber    int    `json:"call_number"`
-			CallTimeStart string `json:"call_time_start"`
-			CallTimeEnd   string `json:"call_time_end"`
-			Subjects      []struct {
-				Lesson []struct {
-					Type    string `json:"type"`
-					Mark    string `json:"mark"`
-					Comment string `json:"comment"`
-				} `json:"lesson"`
-				Hometask                 []string `json:"hometask"`
-				DistanceHometaskID       any      `json:"distance_hometask_id"`
-				DistanceHometaskIsClosed any      `json:"distance_hometask_is_closed"`
-				SubjectName              string   `json:"subject_name"`
-				Room                     string   `json:"room"`
-				Teacher                  struct {
-					ID   int    `json:"id"`
-					Name string `json:"name"`
-				} `json:"teacher"`
-			} `json:"subjects"`
-		} `json:"calls"`
-	} `json:"dates"`
+	Dates        []Date `json:"dates"`
 	ErrorMessage string `json:"error_message"`
 }
 
