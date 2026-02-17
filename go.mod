@@ -8,7 +8,6 @@ require (
 	github.com/bogdanfinn/tls-client v1.13.1
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/gdamore/tcell/v2 v2.8.1
-	github.com/juju/persistent-cookiejar v1.0.0
 	github.com/rivo/tview v0.42.1-0.20250929082832-e113793670e2
 	golang.org/x/term v0.39.0
 )
@@ -29,7 +28,6 @@ require (
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.1 // indirect
 	github.com/gdamore/encoding v1.0.1 // indirect
-	github.com/juju/go4 v0.0.0-20160222163258-40d72ab9641a // indirect
 	github.com/klauspost/compress v1.18.3 // indirect
 	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -43,6 +41,4 @@ require (
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
-	gopkg.in/errgo.v1 v1.0.1 // indirect
-	gopkg.in/retry.v1 v1.0.3 // indirect
 )

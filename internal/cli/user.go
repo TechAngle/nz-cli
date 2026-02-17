@@ -21,6 +21,10 @@ type CLIClient struct {
 	client *api.NZAPIClient
 }
 
+func (c *CLIClient) displayPerfomanceTable() {
+
+}
+
 // Print performance
 func (c *CLIClient) Performance(startDate string, endDate string) error {
 	if !c.client.Authorized() {
@@ -173,6 +177,11 @@ func (c *CLIClient) Diary(startDate string, endDate string) error {
 	})
 	if err != nil {
 		return fmt.Errorf("failed to get diary: %v", err)
+	}
+
+	if len(diary.Dates) == 0 {
+		fmt.Println(visuals.ThirdStyleBold.Render("No data to show!"))
+		return nil
 	}
 
 	datesList := []string{}
