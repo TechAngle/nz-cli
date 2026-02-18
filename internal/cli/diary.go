@@ -79,14 +79,18 @@ func displayDiaryTable(diary *api.DiaryResponse) error {
 		return fmt.Errorf("failed to get terminal size: %v", err)
 	}
 
-	table := table.New().
-		Headers(headers...).
-		Rows(rows).
-		Wrap(true).
-		Width(width - 1). // removing 1 character from width to fit into terminal window perfectly
-		Border(lipgloss.ThickBorder()).BorderStyle(visuals.ThirdStyleBold)
+	pairs := diaryDatesToPairs(headers, rows)
 
-	fmt.Println(table)
+	for _, pair := range *pairs {
+		table := table.New().
+			Headers(pair.headers...).
+			Rows(pair.rows).
+			Wrap(true).
+			Width(width - 1). // removing 1 character from width to fit into terminal window perfectly
+			Border(lipgloss.ThickBorder()).BorderStyle(visuals.ThirdStyleBold)
+
+		fmt.Println(table)
+	}
 
 	return nil
 }

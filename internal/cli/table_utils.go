@@ -5,6 +5,12 @@ import (
 	"strings"
 )
 
+// structure which represents pair of headers and rows for table
+type tablePair struct {
+	headers []string
+	rows    []string
+}
+
 // Removes any " ", "." from subject name
 func normalizeName(subjectName string) string {
 	dotFree := strings.ReplaceAll(subjectName, ".", "")
@@ -38,4 +44,24 @@ func normalizeSubjects(subjects []api.Subject) []api.Subject {
 	}
 
 	return subjectsList
+}
+
+// Divide headers and rows to pairs. returns pairs for both
+func diaryDatesToPairs(headersList, rowsList []string) (pairs *[]tablePair) {
+	pairsList := []tablePair{}
+
+	var pairEnd int
+	for i := 0; i < len(headersList); i += 2 {
+		pairEnd += 2
+		if pairEnd > len(headersList) {
+			pairEnd = len(headersList)
+		}
+
+		pairsList = append(pairsList, tablePair{
+			headers: headersList[i:pairEnd],
+			rows:    rowsList[i:pairEnd],
+		})
+	}
+
+	return &pairsList
 }

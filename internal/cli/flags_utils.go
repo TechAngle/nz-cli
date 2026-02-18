@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"log"
 	"nz-cli/internal/utils"
 	"nz-cli/internal/visuals"
 )
@@ -29,8 +28,6 @@ func processDateFlags() {
 		// parsing and replacing shortcuts to their dates
 		*startDate = utils.ShortcutToDate(*startDate)
 		*endDate = utils.ShortcutToDate(*endDate)
-
-		log.Println(*startDate)
 	}
 }
 
