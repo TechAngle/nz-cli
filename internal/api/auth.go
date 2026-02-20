@@ -7,8 +7,7 @@ import (
 // Logins and overwrites current account settings
 // Method: POST
 func (c *NZAPIClient) Login(payload LoginPayload) error {
-	var response LoginResponse
-	err := c.SendRequest(PostMethod, apiEndpoint+loginEndpoint, payload, &response)
+	response, err := sendRequest[LoginResponse](c, PostMethod, loginEndpoint, &payload)
 	if err != nil {
 		return fmt.Errorf("failed to login: %v", err)
 	}
@@ -29,8 +28,7 @@ func (c *NZAPIClient) Login(payload LoginPayload) error {
 // Returns new access token
 // Method: POST
 func (c *NZAPIClient) RefreshToken(payload RefreshTokenPayload) (string, error) {
-	var response RefreshTokenResponse
-	err := c.SendRequest(PostMethod, apiEndpoint+refreshTokenEndpoint, payload, &response)
+	response, err := sendRequest[RefreshTokenResponse](c, PostMethod, refreshTokenEndpoint, payload)
 	if err != nil {
 		return "", fmt.Errorf("failed to refresh token request: %v", err)
 	}

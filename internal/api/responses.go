@@ -1,6 +1,8 @@
 package api
 
-type ApiResponse any
+type APIResponse interface {
+	LoginResponse | DiaryResponse | GradesResponse | PerfomanceResponse | RefreshTokenResponse | NotificationsResponse | UnreadNotificationsResponse
+}
 
 type LoginResponse struct {
 	AccessToken     string `json:"access_token"`

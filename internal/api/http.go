@@ -27,7 +27,7 @@ NOTE: Requires endpoint as concatenation of original API endpoint and needed
 
 NOTE: if method is GET, payload can be nil, because it won't be marshaled
 */
-func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload Payload, modelResponse ApiResponse) (err error) {
+func sendRequest[R APIResponse](c *NZAPIClient, method Method, endpoint string, payload any) (response *R, err error) {
 	var body *bytes.Buffer
 	if method == PostMethod {
 		body, err = marshalPayload(payload)
@@ -38,15 +38,16 @@ func (c *NZAPIClient) SendRequest(method Method, endpoint string, payload Payloa
 
 	apiResponse, err := c.sendRequest(req)
 	if err != nil {
-		return fmt.Errorf("failed to send request: %v", err)
+		return nil, fmt.Errorf("failed to send request: %v", err)
 	}
 	defer apiResponse.Body.Close()
 
-	if err := readApiResponse(apiResponse, &modelResponse); err != nil {
-		return fmt.Errorf("failed to read api response: %v", err)
+	responseContent, err := readApiResponse[R](apiResponse)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read api response: %v", err)
 	}
 
-	return nil
+	return responseContent, nil
 }
 
 // Adds headers to request. If client is authorized - adds Authorization Bearer
@@ -79,7 +80,7 @@ func (c *NZAPIClient) sendRequest(req *http.Request) (*http.Response, error) {
 }
 
 // Prepare request body
-func marshalPayload(payload Payload) (*bytes.Buffer, error) {
+func marshalPayload(payload any) (*bytes.Buffer, error) {
 	// encoding payload
 	body := new(bytes.Buffer)
 	bodyBytes, err := json.Marshal(payload)
@@ -129,25 +130,31 @@ func readBody(res *http.Response) ([]byte, error) {
 	return bodyContent, nil
 }
 
-// Reads api response and unmarshals it to response pointer
-func readApiResponse(res *http.Response, modelResponse ApiResponse) error {
+// Reads api response and unmarshals it to specified type
+func readApiResponse[R APIResponse](res *http.Response) (*R, error) {
 	bodyContent, err := readBody(res)
 	if err != nil {
-		return fmt.Errorf("failed to read body: %v", err)
+		return nil, fmt.Errorf("failed to read body: %v", err)
 	}
 
+	var modelResponse R
 	// unmarshalling body json content
 	err = json.Unmarshal(bodyContent, &modelResponse)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal body content: %v", err)
+		return nil, fmt.Errorf("failed to unmarshal body content: %v", err)
 	}
 
-	return nil
+	return &modelResponse, nil
 }
 
 // Initializates new request
 func newRequest(method Method, endpoint string, body *bytes.Buffer) (*http.Request, error) {
-	req, err := http.NewRequest(string(method), endpoint, body)
+	apiEndpoint, err := buildEndpoint(endpoint)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build endpoint: %v", err)
+	}
+
+	req, err := http.NewRequest(string(method), apiEndpoint, body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err)
 	}

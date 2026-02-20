@@ -2,12 +2,13 @@ package api
 
 import (
 	"fmt"
+	"net/url"
 	"time"
 )
 
 // Validates dates.
 // If end date was before start date - it switches them.
-func ValidatePayloadDates(startDate string, endDate string) (start string, end string, err error) {
+func validatePayloadDates(startDate string, endDate string) (start string, end string, err error) {
 	// parsing periods
 	startTime, err := time.Parse(DateFormat, startDate)
 	if err != nil {
@@ -27,6 +28,16 @@ func ValidatePayloadDates(startDate string, endDate string) (start string, end s
 }
 
 // Check if their error message is not empty
-func IsNZError(errorMessage string) bool {
+func isNZError(errorMessage string) bool {
 	return errorMessage != ""
+}
+
+// Builds endpoint based on v2
+func buildEndpoint(endpoint string) (string, error) {
+	result, err := url.JoinPath(apiEndpoint, endpoint)
+	if err != nil {
+		return "", fmt.Errorf("cannot build url: %v", err)
+	}
+
+	return result, nil
 }

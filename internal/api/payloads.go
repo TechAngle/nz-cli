@@ -1,6 +1,6 @@
 package api
 
-type Payload any // not any, but maybe i'll change it
+type APIPayload any
 
 // /login payload
 type LoginPayload struct {
